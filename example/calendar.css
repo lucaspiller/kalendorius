@@ -21,6 +21,10 @@ table th {
   background-color: transparent;
 }
 
+.table tbody tr td.date-prev-month, .table tbody tr td.date-next-month {
+  color: #ccc;
+}
+
 .table tbody tr td.date-selected {
   background-color: rgba(0, 255, 0, 0.4);
 }

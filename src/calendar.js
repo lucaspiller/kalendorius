@@ -1,4 +1,6 @@
 (function($){
+  var c = undefined;
+
   var _renderMonth = function(renderDate) {
     var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
@@ -16,8 +18,6 @@
       var column = $('<th>').text(days[day]);
       head.append(column);
     }
-
-    var today = new Date();
 
     // get the previous sunday before the start of this month
     // we pass this to new Date(y, m, d) to get the actual date this corresponds to
@@ -37,7 +37,7 @@
         body.append(tr);
       }
 
-      var currentDate = new Date(today.getFullYear(), today.getMonth(), firstDay + day);
+      var currentDate = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth(), firstDay + day);
       var currentElement = $('<td>').attr('data-date', _toYMD(currentDate)).text(currentDate.getDate());
 
       if (currentDate.getMonth() < startOfMonth.getMonth()) {
@@ -49,6 +49,10 @@
     }
 
     return table;
+  };
+
+  var _toggleDateSelected = function(dateString) {
+    c.find('td[data-date=' + dateString + ']').toggleClass('date-selected');
   };
 
   //
@@ -82,7 +86,7 @@
   };
 
   $.fn.calendar = function(options) {
-    var c = $(this);
+    c = $(this);
 
     var options = options || {};
     options.months = typeof options.months !== "undefined" && options.months !== null ? options.months : 1;
@@ -115,13 +119,15 @@
           rangeStart = undefined;
           c.find('td').removeClass('date-range');
           $this.removeClass('date-range-start');
-          $this.toggleClass('date-selected');
+          _toggleDateSelected($this.attr('data-date'));
         } else if (rangeStart) {
           rangeStart = undefined;
           c.find('td.date-range')
-            .toggleClass('date-selected')
             .removeClass('date-range-start')
-            .removeClass('date-range');
+            .removeClass('date-range').each(function() {
+              var date = $(this).attr('data-date');
+              _toggleDateSelected(date);
+            });
         } else {
           $this.addClass('date-range-start');
           rangeStart = $this;
