@@ -347,7 +347,7 @@
         });
       });
     });
-    return describe("options", function() {
+    describe("options", function() {
       it("should allow adding classes to the tables", function() {
         container.calendar({
           tableClass: 'table table-bordered'
@@ -359,6 +359,27 @@
           date: new Date(2012, 8, 23)
         });
         return expect(container).toContain("table[data-month=2012-09-01]");
+      });
+    });
+    return describe("moving between months", function() {
+      beforeEach(function() {
+        return container.calendar();
+      });
+      it("should move to the next month", function() {
+        expect(container).toContain("table[data-month=2012-05-01]");
+        container.calendar('next');
+        return expect(container).toContain("table[data-month=2012-06-01]");
+      });
+      it("should move to the previous month", function() {
+        expect(container).toContain("table[data-month=2012-05-01]");
+        container.calendar('prev');
+        return expect(container).toContain("table[data-month=2012-04-01]");
+      });
+      return it("should move to today", function() {
+        expect(container).toContain("table[data-month=2012-05-01]");
+        Timecop.freeze(new Date(2012, 6, 1, 10, 48));
+        container.calendar('today');
+        return expect(container).toContain("table[data-month=2012-07-01]");
       });
     });
   });

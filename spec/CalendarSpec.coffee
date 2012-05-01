@@ -380,3 +380,24 @@ describe "CalendarSpec", ->
         date: new Date(2012, 8, 23) # 23rd September 2012
       })
       expect(container).toContain("table[data-month=2012-09-01]")
+
+  describe "moving between months", ->
+    beforeEach ->
+      container.calendar()
+
+    it "should move to the next month", ->
+      expect(container).toContain("table[data-month=2012-05-01]")
+      container.calendar('next')
+      expect(container).toContain("table[data-month=2012-06-01]")
+
+    it "should move to the previous month", ->
+      expect(container).toContain("table[data-month=2012-05-01]")
+      container.calendar('prev')
+      expect(container).toContain("table[data-month=2012-04-01]")
+
+    it "should move to today", ->
+      expect(container).toContain("table[data-month=2012-05-01]")
+
+      Timecop.freeze new Date(2012, 6, 1, 10, 48) # 1st July 2012
+      container.calendar('today')
+      expect(container).toContain("table[data-month=2012-07-01]")
