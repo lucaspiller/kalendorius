@@ -62,10 +62,25 @@
       k.selected[date] = false;
     }
 
-    selection.each(function() {
-      var date = $(this).attr('data-date');
-      c.find('td[data-date=' + date + ']').toggleClass('date-selected')
-    });
+    if (selection.length == 1) {
+      // toggle if only one selected
+      selection.each(function() {
+        var date = $(this).attr('data-date');
+        c.find('td[data-date=' + date + ']').toggleClass('date-selected')
+      });
+    } else if (selection.length == selection.filter('.date-selected').length) {
+      // if all selected, set all as unselected
+      selection.each(function() {
+        var date = $(this).attr('data-date');
+        c.find('td[data-date=' + date + ']').removeClass('date-selected')
+      });
+    } else {
+      // if some or none selected, set all as selected
+      selection.each(function() {
+        var date = $(this).attr('data-date');
+        c.find('td[data-date=' + date + ']').addClass('date-selected')
+      });
+    }
 
     var selected = c.find('td.date-selected');
     for(var i = 0; i < selected.length; i++) {

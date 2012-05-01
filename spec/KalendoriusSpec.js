@@ -232,7 +232,7 @@
           return endDate = container.find('td[data-date=2012-05-13]');
         });
         return describe("forward on the same week", function() {
-          it("should remove the date-selected class to all dates between that and the clicked date", function() {
+          it("should remove the date-selected class to all dates between that and the clicked date when none are selected", function() {
             startDate.click();
             endDate.mouseenter();
             endDate.click();
@@ -247,7 +247,7 @@
             expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-hover");
           });
-          return it("should toggle the date-selected class to all dates between that and the clicked date", function() {
+          return it("should set add the date-selected class to all dates between that and the clicked date when some are selected", function() {
             var midDate;
             startDate.click();
             endDate.mouseenter();
@@ -262,9 +262,9 @@
             startDate.click();
             endDate.mouseenter();
             endDate.click();
-            expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
             expect(container).toContain("td[data-date=2012-05-12].date-selected");
-            expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
+            expect(container).toContain("td[data-date=2012-05-13].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-hover");
           });
         });

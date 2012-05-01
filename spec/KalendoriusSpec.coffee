@@ -225,7 +225,7 @@ describe "KalendoriusSpec", ->
           expect(container).toContain("td[data-date=2012-05-08].date-selected")
           expect(container).toContain("td[data-date=2012-05-07].date-selected")
           expect(container).toContain("td[data-date=2012-05-06].date-selected")
-          expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover")
+          expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover") 
 
     describe "range unselection", ->
       endDate = undefined
@@ -234,7 +234,7 @@ describe "KalendoriusSpec", ->
         endDate = container.find('td[data-date=2012-05-13]')
 
       describe "forward on the same week", ->
-        it "should remove the date-selected class to all dates between that and the clicked date", ->
+        it "should remove the date-selected class to all dates between that and the clicked date when none are selected", ->
           # select everything
           startDate.click()
           endDate.mouseenter()
@@ -254,7 +254,7 @@ describe "KalendoriusSpec", ->
           expect(container).not.toContain("td[data-date=2012-05-13].date-selected")
           expect(container).toContain("td[data-date=2012-05-13].date-hover")
 
-        it "should toggle the date-selected class to all dates between that and the clicked date", ->
+        it "should set add the date-selected class to all dates between that and the clicked date when some are selected", ->
           # select everything
           startDate.click()
           endDate.mouseenter()
@@ -276,9 +276,9 @@ describe "KalendoriusSpec", ->
           endDate.mouseenter()
           endDate.click()
 
-          expect(container).not.toContain("td[data-date=2012-05-11].date-selected")
+          expect(container).toContain("td[data-date=2012-05-11].date-selected")
           expect(container).toContain("td[data-date=2012-05-12].date-selected")
-          expect(container).not.toContain("td[data-date=2012-05-13].date-selected")
+          expect(container).toContain("td[data-date=2012-05-13].date-selected")
           expect(container).toContain("td[data-date=2012-05-13].date-hover")
 
   describe "multi-month view", ->
