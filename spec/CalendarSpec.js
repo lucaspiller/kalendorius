@@ -278,9 +278,18 @@
       });
       it("should render three months of data", function() {
         expect(container.find('table').length).toEqual(3);
-        expect(container).toContain("table[data-month=2012-05-01]");
-        expect(container).toContain("table[data-month=2012-06-01]");
-        return expect(container).toContain("table[data-month=2012-07-01]");
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-04-30]");
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-01]");
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-31]");
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-10]");
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-28]");
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01]");
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-30]");
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-07-08]");
+        expect(container).toContain("table[data-month=2012-07-01] td[data-date=2012-06-25]");
+        expect(container).toContain("table[data-month=2012-07-01] td[data-date=2012-07-01]");
+        expect(container).toContain("table[data-month=2012-07-01] td[data-date=2012-07-31]");
+        return expect(container).toContain("table[data-month=2012-07-01] td[data-date=2012-08-05]");
       });
       return describe("duplicated dates across a month boundary", function() {
         it("should be kept in sync", function() {

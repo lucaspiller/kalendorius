@@ -21,8 +21,10 @@
 
     // get the previous sunday before the start of this month
     // we pass this to new Date(y, m, d) to get the actual date this corresponds to
-    //var firstDay = -(5 - startOfMonth.getDay())
     var firstDay = startOfMonth.getDate() - startOfMonth.getDay();
+    if (startOfMonth.getDay() == 0) {
+      firstDay -= 7;
+    }
 
     // be sane, start the week on monday
     firstDay = firstDay + 1;
