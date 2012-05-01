@@ -1,19 +1,11 @@
 (function($){
-  // TODO add to our namespace
-  $.fn.between = function (elm0, elm1) {
-    var index0 = $(this).index(elm0);
-    var index1 = $(this).index(elm1);
+  var _renderMonth = function(renderDate) {
+    var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
-    if (index0 <= index1)
-      return this.slice(index0, index1 + 1);
-    else
-      return this.slice(index1, index0 + 1);
-  }
-
-  $.fn.calendar = function(options) {
-    var options = options || {};
-
-    var table = $('<table>').addClass('table').addClass('table-bordered');
+    var table = $('<table>')
+                  .attr('data-month', _toYMD(startOfMonth))
+                  .addClass('table') // TODO move to options
+                  .addClass('table-bordered');
 
     // add table header
     var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -26,8 +18,6 @@
     }
 
     var today = new Date();
-
-    var startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
     // get the previous sunday before the start of this month
     // we pass this to new Date(y, m, d) to get the actual date this corresponds to
@@ -48,12 +38,7 @@
       }
 
       var currentDate = new Date(today.getFullYear(), today.getMonth(), firstDay + day);
-
-      var formattedMonth = (currentDate.getMonth() + 1) < 10 ? "0" + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1);
-      var formattedDay = currentDate.getDate() < 10 ? "0" + currentDate.getDate() : currentDate.getDate();
-
-      var formattedDate = currentDate.getFullYear() + "-" + formattedMonth + "-" + formattedDay;
-      var currentElement = $('<td>').attr('data-date', formattedDate).text(currentDate.getDate());
+      var currentElement = $('<td>').attr('data-date', _toYMD(currentDate)).text(currentDate.getDate());
 
       if (currentDate.getMonth() < startOfMonth.getMonth()) {
         currentElement.addClass('date-prev-month');
@@ -63,15 +48,54 @@
       tr.append(currentElement);
     }
 
+    return table;
+  };
+
+  //
+  // extensions
+  //
+
+  // returns the elements in the jquery
+  // selection between elm0 and elm1
+  var _between = function (selection, elm0, elm1) {
+    var index0 = selection.index(elm0);
+    var index1 = selection.index(elm1);
+
+    if (index0 <= index1)
+      return selection.slice(index0, index1 + 1);
+    else
+      return selection.slice(index1, index0 + 1);
+  };
+
+  // formats a date in YYYY-MM-DD format
+  // (including leading zeros)
+  var _toYMD = function(date) {
+    var y = date.getFullYear();
+
+    var m = date.getMonth() + 1; // WHY??!?!??!?!?!?
+    m = (m < 10) ? "0" + m : m;
+
+    var d = date.getDate();
+    d = (d < 10) ? "0" + d : d;
+
+    return y + "-" + m + "-" + d;
+  };
+
+  $.fn.calendar = function(options) {
+    var options = options || {};
+
+    var table = _renderMonth(new Date());
+    this.append(table);
+
     var rangeStart = undefined;
 
-    table.find('td')
+    this.find('td')
       .mouseenter(function() {
         var $this = $(this);
         $this.addClass('date-hover');
         if (rangeStart !== undefined) {
           table.find('td').removeClass('date-range');
-          table.find('td').between(rangeStart, $this).addClass('date-range');
+          _between(table.find('td'), rangeStart, $this).addClass('date-range');
         }
       }).mouseleave(function() {
         var $this = $(this);
@@ -147,8 +171,6 @@
     //    getDatesBetween(clickStart, $(this));
     //  }
     //});
-
-    this.append(table);
     return true;
   };
 })( jQuery );
