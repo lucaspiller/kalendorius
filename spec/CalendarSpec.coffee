@@ -1,4 +1,4 @@
-describe "CalendarSpec", ->
+describe "KalendoriusSpec", ->
   container = undefined
 
   beforeEach ->
@@ -11,14 +11,14 @@ describe "CalendarSpec", ->
 
   describe "arguments", ->
     it "should accept zero arguments", ->
-      container.calendar()
+      container.kalendorius()
 
     it "should accept an options hash", ->
-      container.calendar {}
+      container.kalendorius {}
 
   describe "basic rendering", ->
     beforeEach ->
-      container.calendar()
+      container.kalendorius()
 
     it "should contain day headers", ->
       expect(
@@ -66,7 +66,7 @@ describe "CalendarSpec", ->
     startDate = undefined
 
     beforeEach ->
-      container.calendar()
+      container.kalendorius()
       startDate = container.find('td[data-date=2012-05-11]')
 
     describe "unselected dates", ->
@@ -283,7 +283,7 @@ describe "CalendarSpec", ->
 
   describe "multi-month view", ->
     beforeEach ->
-      container.calendar({
+      container.kalendorius({
         months: 3
       })
 
@@ -370,46 +370,58 @@ describe "CalendarSpec", ->
 
   describe "options", ->
     it "should allow adding classes to the tables", ->
-      container.calendar({
+      container.kalendorius({
         tableClass: 'table table-bordered'
       })
       expect(container).toContain("table[data-month=2012-05-01].table.table-bordered")
 
     it "should allow starting from a custom month", ->
-      container.calendar({
+      container.kalendorius({
         date: new Date(2012, 8, 23) # 23rd September 2012
       })
       expect(container).toContain("table[data-month=2012-09-01]")
 
   describe "moving between months", ->
     beforeEach ->
-      container.calendar()
+      container.kalendorius()
 
     it "should move to the next month", ->
       expect(container).toContain("table[data-month=2012-05-01]")
-      container.calendar('next')
+      container.kalendorius('next')
       expect(container).toContain("table[data-month=2012-06-01]")
 
     it "should move to the previous month", ->
       expect(container).toContain("table[data-month=2012-05-01]")
-      container.calendar('prev')
+      container.kalendorius('prev')
       expect(container).toContain("table[data-month=2012-04-01]")
 
     it "should move to today", ->
       expect(container).toContain("table[data-month=2012-05-01]")
 
       Timecop.freeze new Date(2012, 6, 1, 10, 48) # 1st July 2012
-      container.calendar('today')
+      container.kalendorius('today')
       expect(container).toContain("table[data-month=2012-07-01]")
 
-    it "should maintain selected dates when moving between monhts", ->
+    it "should maintain selected dates when moving between months", ->
       date = container.find('td[data-date=2012-05-11]')
       date.click()
       date.click()
       expect(container).toContain("td[data-date=2012-05-11].date-selected")
 
-      container.calendar('next')
+      container.kalendorius('next')
       expect(container).not.toContain("td[data-date=2012-05-11].date-selected")
 
-      container.calendar('prev')
+      container.kalendorius('prev')
+      expect(container).toContain("td[data-date=2012-05-11].date-selected")
+
+    it "should allow dates to be selected after moving between months", ->
+      container.kalendorius('next')
+      expect(container).not.toContain("td[data-date=2012-05-11]")
+
+      container.kalendorius('prev')
+      expect(container).toContain("td[data-date=2012-05-11]")
+
+      date = container.find('td[data-date=2012-05-11]')
+      date.click()
+      date.click()
       expect(container).toContain("td[data-date=2012-05-11].date-selected")

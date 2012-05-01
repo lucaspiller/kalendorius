@@ -95,6 +95,43 @@
         c.find('td[data-date=' + date + ']').addClass('date-selected')
       }
     }
+
+    var rangeStart = undefined;
+
+    c.find('td')
+      .mouseenter(function() {
+        var $this = $(this);
+        if ($this.hasClass('date-current-month')) {
+          $this.addClass('date-hover');
+          if (rangeStart !== undefined) {
+            c.find('td').removeClass('date-range');
+            _toggleRange(_between(c.find('td.date-current-month'), rangeStart, $this));
+          }
+        }
+      }).mouseleave(function() {
+        var $this = $(this);
+        $this.removeClass('date-hover');
+      }).click(function() {
+        var $this = $(this);
+        if ($this.hasClass('date-range-start')) {
+          rangeStart = undefined;
+          c.find('td').removeClass('date-range');
+          $this.removeClass('date-range-start');
+          _toggleSelected($this);
+        } else if (rangeStart) {
+          rangeStart = undefined;
+          _toggleSelected(c.find('td.date-range.date-current-month'));
+          c.find('td.date-range')
+            .removeClass('date-range-start')
+            .removeClass('date-range');
+        } else {
+          if ($this.hasClass('date-current-month')) {
+            $this.addClass('date-range-start');
+            rangeStart = $this;
+          }
+        }
+        this.blur();
+      });
   }
 
   //
@@ -127,7 +164,7 @@
     return y + "-" + m + "-" + d;
   };
 
-  $.fn.calendar = function(options) {
+  $.fn.kalendorius = function(options) {
     c = this;
     if (options == "next") {
       k.options.date = new Date(k.options.date.getFullYear(), k.options.date.getMonth() + 1, 1);
@@ -146,43 +183,6 @@
       k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
 
       _render(k.options);
-
-      var rangeStart = undefined;
-
-      c.find('td')
-        .mouseenter(function() {
-          var $this = $(this);
-          if ($this.hasClass('date-current-month')) {
-            $this.addClass('date-hover');
-            if (rangeStart !== undefined) {
-              c.find('td').removeClass('date-range');
-              _toggleRange(_between(c.find('td.date-current-month'), rangeStart, $this));
-            }
-          }
-        }).mouseleave(function() {
-          var $this = $(this);
-          $this.removeClass('date-hover');
-        }).click(function() {
-          var $this = $(this);
-          if ($this.hasClass('date-range-start')) {
-            rangeStart = undefined;
-            c.find('td').removeClass('date-range');
-            $this.removeClass('date-range-start');
-            _toggleSelected($this);
-          } else if (rangeStart) {
-            rangeStart = undefined;
-            _toggleSelected(c.find('td.date-range.date-current-month'));
-            c.find('td.date-range')
-              .removeClass('date-range-start')
-              .removeClass('date-range');
-          } else {
-            if ($this.hasClass('date-current-month')) {
-              $this.addClass('date-range-start');
-              rangeStart = $this;
-            }
-          }
-          this.blur();
-        });
     }
 
     return true;
