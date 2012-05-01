@@ -2,10 +2,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script type="text/javascript" src="../lib/jquery-1.7.1.js"></script>
-    <script type="text/javascript" src="../src/calendar.js"></script>
+    <script type="text/javascript" src="../src/kalendorius.js"></script>
 
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" />
-    <link rel="stylesheet" href="calendar.css" />
+    <link rel="stylesheet" href="kalendorius.css" />
   </head>
   <body>
     <div class="btn-toolbar">
@@ -20,14 +20,14 @@
     <div id="calendar"></div>
     <script type="text/javascript">
       $(document).ready(function() {
-        $('#calendar').calendar({
+        $('#calendar').kalendorius({
           months: 3,
           tableClass: 'table table-bordered',
           date: new Date(2012, 8, 23) // 23rd September 2012
         });
         $('.btn').click(function() {
           var action = $(this).attr('data-action');
-          $('#calendar').calendar(action);
+          $('#calendar').kalendorius(action);
         });
       });
     </script>
