@@ -375,11 +375,22 @@
         container.calendar('prev');
         return expect(container).toContain("table[data-month=2012-04-01]");
       });
-      return it("should move to today", function() {
+      it("should move to today", function() {
         expect(container).toContain("table[data-month=2012-05-01]");
         Timecop.freeze(new Date(2012, 6, 1, 10, 48));
         container.calendar('today');
         return expect(container).toContain("table[data-month=2012-07-01]");
+      });
+      return it("should maintain selected dates when moving between monhts", function() {
+        var date;
+        date = container.find('td[data-date=2012-05-11]');
+        date.click();
+        date.click();
+        expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        container.calendar('next');
+        expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        container.calendar('prev');
+        return expect(container).toContain("td[data-date=2012-05-11].date-selected");
       });
     });
   });

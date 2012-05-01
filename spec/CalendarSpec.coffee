@@ -401,3 +401,15 @@ describe "CalendarSpec", ->
       Timecop.freeze new Date(2012, 6, 1, 10, 48) # 1st July 2012
       container.calendar('today')
       expect(container).toContain("table[data-month=2012-07-01]")
+
+    it "should maintain selected dates when moving between monhts", ->
+      date = container.find('td[data-date=2012-05-11]')
+      date.click()
+      date.click()
+      expect(container).toContain("td[data-date=2012-05-11].date-selected")
+
+      container.calendar('next')
+      expect(container).not.toContain("td[data-date=2012-05-11].date-selected")
+
+      container.calendar('prev')
+      expect(container).toContain("td[data-date=2012-05-11].date-selected")
