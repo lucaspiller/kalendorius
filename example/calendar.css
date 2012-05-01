@@ -26,6 +26,10 @@ table th {
 }
 
 .table tbody tr td.date-selected {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+
+.table tbody tr td.date-current-month.date-selected {
   background-color: rgba(0, 255, 0, 0.4);
 }
 
@@ -34,6 +38,10 @@ table th {
 }
 
 .table tbody tr td.date-range {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.table tbody tr td.date-current-month.date-range {
   background-color: rgba(255, 0, 0, 0.4);
 }
 

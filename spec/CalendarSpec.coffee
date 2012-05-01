@@ -39,26 +39,26 @@ describe "CalendarSpec", ->
           formattedDate = "0#{date}"
         else
           formattedDate = date
-        expect(container).toContain("td[data-date=2012-05-#{formattedDate}]")
+        expect(container).toContain("td[data-date=2012-05-#{formattedDate}].date-current-month")
 
     it "should contain the days of the last month in the first week", ->
-      expect(container).not.toContain("td[data-date=2012-04-29][class=date-prev-month]")
+      expect(container).not.toContain("td[data-date=2012-04-29].date-prev-month")
 
-      expect(container).toContain("td[data-date=2012-04-30][class=date-prev-month]")
+      expect(container).toContain("td[data-date=2012-04-30].date-prev-month")
 
     it "should contain the days of the next month in the last weeks", ->
-      expect(container).toContain("td[data-date=2012-06-01][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-02][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-03][class=date-next-month]")
+      expect(container).toContain("td[data-date=2012-06-01].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-02].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-03].date-next-month")
 
       # we always display six weeks
-      expect(container).toContain("td[data-date=2012-06-04][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-05][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-06][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-07][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-08][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-09][class=date-next-month]")
-      expect(container).toContain("td[data-date=2012-06-10][class=date-next-month]")
+      expect(container).toContain("td[data-date=2012-06-04].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-05].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-06].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-07].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-08].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-09].date-next-month")
+      expect(container).toContain("td[data-date=2012-06-10].date-next-month")
 
       expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]")
 
@@ -112,6 +112,26 @@ describe "CalendarSpec", ->
 
         expect(container).not.toContain("td[data-date=2012-05-11].date-range-start")
         expect(container).not.toContain("td[data-date=2012-05-11].date-selected")
+
+      it "should not add the date-hover or date-selected class to dates in the last month", ->
+        expect(container).toContain("td[data-date=2012-04-30].date-prev-month")
+        date = container.find("td[data-date=2012-04-30].date-prev-month")
+
+        date.mouseenter()
+        expect(container).not.toContain("td[data-date=2012-04-30].date-prev-month.date-hover")
+
+        date.click()
+        expect(container).not.toContain("td[data-date=2012-04-30].date-prev-month.date-range-start")
+
+      it "should not add the date-hover or date-selected class to dates in the next month", ->
+        expect(container).toContain("td[data-date=2012-06-01].date-next-month")
+        date = container.find("td[data-date=2012-06-01].date-next-month")
+
+        date.mouseenter()
+        expect(container).not.toContain("td[data-date=2012-06-01].date-next-month.date-hover")
+
+        date.click()
+        expect(container).not.toContain("td[data-date=2012-06-01].date-next-month.date-range-start")
 
     describe "range selection", ->
       endDate = undefined
@@ -260,3 +280,39 @@ describe "CalendarSpec", ->
           expect(container).toContain("td[data-date=2012-05-12].date-selected")
           expect(container).not.toContain("td[data-date=2012-05-13].date-selected")
           expect(container).toContain("td[data-date=2012-05-13].date-hover")
+
+  describe "multi-month view", ->
+    beforeEach ->
+      container.calendar({
+        months: 3
+      })
+
+    it "should render three months of data", ->
+      expect(container.find('table').length).toEqual(3)
+
+      expect(container).toContain("table[data-month=2012-05-01]")
+      expect(container).toContain("table[data-month=2012-06-01]")
+      expect(container).toContain("table[data-month=2012-07-01]")
+
+    describe "duplicated dates", ->
+      date1 = undefined
+      date2 = undefined
+
+      beforeEach ->
+        date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-06-03]")
+        date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-03]")
+
+      it "should keep selected dates in sync", ->
+        # date1 is not clickable
+
+        date2.click()
+        date2.click()
+
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected")
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected")
+
+        date2.click()
+        date2.click()
+
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected")
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected")

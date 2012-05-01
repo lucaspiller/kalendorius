@@ -46,29 +46,29 @@
           } else {
             formattedDate = date;
           }
-          _results.push(expect(container).toContain("td[data-date=2012-05-" + formattedDate + "]"));
+          _results.push(expect(container).toContain("td[data-date=2012-05-" + formattedDate + "].date-current-month"));
         }
         return _results;
       });
       it("should contain the days of the last month in the first week", function() {
-        expect(container).not.toContain("td[data-date=2012-04-29][class=date-prev-month]");
-        return expect(container).toContain("td[data-date=2012-04-30][class=date-prev-month]");
+        expect(container).not.toContain("td[data-date=2012-04-29].date-prev-month");
+        return expect(container).toContain("td[data-date=2012-04-30].date-prev-month");
       });
       return it("should contain the days of the next month in the last weeks", function() {
-        expect(container).toContain("td[data-date=2012-06-01][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-02][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-03][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-04][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-05][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-06][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-07][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-08][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-09][class=date-next-month]");
-        expect(container).toContain("td[data-date=2012-06-10][class=date-next-month]");
+        expect(container).toContain("td[data-date=2012-06-01].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-02].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-03].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-04].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-05].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-06].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-07].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-08].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-09].date-next-month");
+        expect(container).toContain("td[data-date=2012-06-10].date-next-month");
         return expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]");
       });
     });
-    return describe("highlighting", function() {
+    describe("highlighting", function() {
       var startDate;
       startDate = void 0;
       beforeEach(function() {
@@ -109,11 +109,29 @@
           startDate.click();
           return expect(container).toContain("td[data-date=2012-05-11].date-selected.date-range-start");
         });
-        return it("should remove the date-selected class to dates when clicked twice", function() {
+        it("should remove the date-selected class to dates when clicked twice", function() {
           startDate.click();
           startDate.click();
           expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
           return expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        });
+        it("should not add the date-hover or date-selected class to dates in the last month", function() {
+          var date;
+          expect(container).toContain("td[data-date=2012-04-30].date-prev-month");
+          date = container.find("td[data-date=2012-04-30].date-prev-month");
+          date.mouseenter();
+          expect(container).not.toContain("td[data-date=2012-04-30].date-prev-month.date-hover");
+          date.click();
+          return expect(container).not.toContain("td[data-date=2012-04-30].date-prev-month.date-range-start");
+        });
+        return it("should not add the date-hover or date-selected class to dates in the next month", function() {
+          var date;
+          expect(container).toContain("td[data-date=2012-06-01].date-next-month");
+          date = container.find("td[data-date=2012-06-01].date-next-month");
+          date.mouseenter();
+          expect(container).not.toContain("td[data-date=2012-06-01].date-next-month.date-hover");
+          date.click();
+          return expect(container).not.toContain("td[data-date=2012-06-01].date-next-month.date-range-start");
         });
       });
       describe("range selection", function() {
@@ -249,6 +267,38 @@
             expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-hover");
           });
+        });
+      });
+    });
+    return describe("multi-month view", function() {
+      beforeEach(function() {
+        return container.calendar({
+          months: 3
+        });
+      });
+      it("should render three months of data", function() {
+        expect(container.find('table').length).toEqual(3);
+        expect(container).toContain("table[data-month=2012-05-01]");
+        expect(container).toContain("table[data-month=2012-06-01]");
+        return expect(container).toContain("table[data-month=2012-07-01]");
+      });
+      return describe("duplicated dates", function() {
+        var date1, date2;
+        date1 = void 0;
+        date2 = void 0;
+        beforeEach(function() {
+          date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-06-03]");
+          return date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-03]");
+        });
+        return it("should keep selected dates in sync", function() {
+          date2.click();
+          date2.click();
+          expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected");
+          expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected");
+          date2.click();
+          date2.click();
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected");
+          return expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected");
         });
       });
     });

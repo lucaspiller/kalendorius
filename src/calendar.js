@@ -44,6 +44,8 @@
         currentElement.addClass('date-prev-month');
       } else if (currentDate.getMonth() > startOfMonth.getMonth()) {
         currentElement.addClass('date-next-month');
+      } else {
+        currentElement.addClass('date-current-month');
       }
       tr.append(currentElement);
     }
@@ -105,10 +107,12 @@
     c.find('td')
       .mouseenter(function() {
         var $this = $(this);
-        $this.addClass('date-hover');
-        if (rangeStart !== undefined) {
-          c.find('td').removeClass('date-range');
-          _between(c.find('td'), rangeStart, $this).addClass('date-range');
+        if ($this.hasClass('date-current-month')) {
+          $this.addClass('date-hover');
+          if (rangeStart !== undefined) {
+            c.find('td').removeClass('date-range');
+            _between(c.find('td'), rangeStart, $this).addClass('date-range');
+          }
         }
       }).mouseleave(function() {
         var $this = $(this);
@@ -129,8 +133,10 @@
               _toggleDateSelected(date);
             });
         } else {
-          $this.addClass('date-range-start');
-          rangeStart = $this;
+          if ($this.hasClass('date-current-month')) {
+            $this.addClass('date-range-start');
+            rangeStart = $this;
+          }
         }
         this.blur();
       });
