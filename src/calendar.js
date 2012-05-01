@@ -144,57 +144,6 @@
         this.blur();
       });
 
-    //var clickStart = undefined;
-    //table.find('td').click(function() {
-    //  if (clickStart === undefined) {
-    //    $(this).addClass('clicked');
-    //    clickStart = $(this);
-    //  } else {
-    //    var elements = getDatesBetween(clickStart, $(this));
-    //    elements.toggleClass('selected').removeClass('mouse').removeClass('clicked');
-    //    clickStart = undefined;
-    //  }
-    //});
-
-    //var getDatesBetween = function(start, end) {
-    //  var within = false;
-    //  var elements = [];
-
-    //  table.find('td').each(function(i) {
-    //    var td = $(this);
-    //    if (within == false) {
-    //      if (td.attr('data-date') == start.attr('data-date')) {
-    //        elements.push(start.get(0));
-    //        within = true;
-    //      } else if (td.attr('data-date') == end.attr('data-date')) {
-    //        elements.push(end.get(0));
-    //        within = true;
-    //      } else {
-    //        td.removeClass('mouse');
-    //      }
-    //    } else {
-    //      if (td.attr('data-date') == end.attr('data-date')) {
-    //        elements.push(end.get(0));
-    //        within = false;
-    //      } else if (td.attr('data-date') == start.attr('data-date')) {
-    //        td.addClass('mouse');
-    //        elements.push(start.get(0));
-    //        within = false;
-    //      } else {
-    //        td.addClass('mouse');
-    //        elements.push(this);
-    //      }
-    //    }
-    //  });
-
-    //  return $(elements);
-    //};
-
-    //table.find('td').mouseover(function() {
-    //  if (clickStart) {
-    //    getDatesBetween(clickStart, $(this));
-    //  }
-    //});
     return true;
   };
 })( jQuery );
