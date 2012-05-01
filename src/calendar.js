@@ -1,4 +1,15 @@
 (function($){
+  // TODO add to our namespace
+  $.fn.between = function (elm0, elm1) {
+    var index0 = $(this).index(elm0);
+    var index1 = $(this).index(elm1);
+
+    if (index0 <= index1)
+      return this.slice(index0, index1 + 1);
+    else
+      return this.slice(index1, index0 + 1);
+  }
+
   $.fn.calendar = function(options) {
     var options = options || {};
 
@@ -52,57 +63,90 @@
       tr.append(currentElement);
     }
 
-    var clickStart = undefined;
-    table.find('td').click(function() {
-      if (clickStart === undefined) {
-        $(this).addClass('clicked');
-        clickStart = $(this);
-      } else {
-        var elements = getDatesBetween(clickStart, $(this));
-        elements.toggleClass('selected').removeClass('mouse').removeClass('clicked');
-        clickStart = undefined;
-      }
-    });
+    var rangeStart = undefined;
 
-    var getDatesBetween = function(start, end) {
-      var within = false;
-      var elements = [];
-
-      table.find('td').each(function(i) {
-        var td = $(this);
-        if (within == false) {
-          if (td.attr('data-date') == start.attr('data-date')) {
-            elements.push(start.get(0));
-            within = true;
-          } else if (td.attr('data-date') == end.attr('data-date')) {
-            elements.push(end.get(0));
-            within = true;
-          } else {
-            td.removeClass('mouse');
-          }
-        } else {
-          if (td.attr('data-date') == end.attr('data-date')) {
-            elements.push(end.get(0));
-            within = false;
-          } else if (td.attr('data-date') == start.attr('data-date')) {
-            td.addClass('mouse');
-            elements.push(start.get(0));
-            within = false;
-          } else {
-            td.addClass('mouse');
-            elements.push(this);
-          }
+    table.find('td')
+      .mouseenter(function() {
+        var $this = $(this);
+        $this.addClass('date-hover');
+        if (rangeStart !== undefined) {
+          table.find('td').removeClass('date-range');
+          table.find('td').between(rangeStart, $this).addClass('date-range');
         }
+      }).mouseleave(function() {
+        var $this = $(this);
+        $this.removeClass('date-hover');
+      }).click(function() {
+        var $this = $(this);
+        if ($this.hasClass('date-range-start')) {
+          rangeStart = undefined;
+          table.find('td').removeClass('date-range');
+          $this.removeClass('date-range-start');
+          $this.toggleClass('date-selected');
+        } else if (rangeStart) {
+          rangeStart = undefined;
+          table.find('td.date-range')
+            .toggleClass('date-selected')
+            .removeClass('date-range-start')
+            .removeClass('date-range');
+        } else {
+          $this.addClass('date-range-start');
+          rangeStart = $this;
+        }
+        this.blur();
       });
 
-      return $(elements);
-    };
+    //var clickStart = undefined;
+    //table.find('td').click(function() {
+    //  if (clickStart === undefined) {
+    //    $(this).addClass('clicked');
+    //    clickStart = $(this);
+    //  } else {
+    //    var elements = getDatesBetween(clickStart, $(this));
+    //    elements.toggleClass('selected').removeClass('mouse').removeClass('clicked');
+    //    clickStart = undefined;
+    //  }
+    //});
 
-    table.find('td').mouseover(function() {
-      if (clickStart) {
-        getDatesBetween(clickStart, $(this));
-      }
-    });
+    //var getDatesBetween = function(start, end) {
+    //  var within = false;
+    //  var elements = [];
+
+    //  table.find('td').each(function(i) {
+    //    var td = $(this);
+    //    if (within == false) {
+    //      if (td.attr('data-date') == start.attr('data-date')) {
+    //        elements.push(start.get(0));
+    //        within = true;
+    //      } else if (td.attr('data-date') == end.attr('data-date')) {
+    //        elements.push(end.get(0));
+    //        within = true;
+    //      } else {
+    //        td.removeClass('mouse');
+    //      }
+    //    } else {
+    //      if (td.attr('data-date') == end.attr('data-date')) {
+    //        elements.push(end.get(0));
+    //        within = false;
+    //      } else if (td.attr('data-date') == start.attr('data-date')) {
+    //        td.addClass('mouse');
+    //        elements.push(start.get(0));
+    //        within = false;
+    //      } else {
+    //        td.addClass('mouse');
+    //        elements.push(this);
+    //      }
+    //    }
+    //  });
+
+    //  return $(elements);
+    //};
+
+    //table.find('td').mouseover(function() {
+    //  if (clickStart) {
+    //    getDatesBetween(clickStart, $(this));
+    //  }
+    //});
 
     this.append(table);
     return true;

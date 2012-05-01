@@ -21,19 +21,18 @@ table th {
   background-color: transparent;
 }
 
-.table tbody tr td:hover {
-  background-color: #CCC;
-}
-
-.table tbody tr td.selected {
+.table tbody tr td.date-selected {
   background-color: rgba(0, 255, 0, 0.4);
 }
 
-.table tbody tr td.mouse {
+.table tbody tr td.date-range-start {
   background-color: rgba(0, 0, 255, 0.4);
 }
 
-.table tbody tr td.clicked, .table tbody tr td.clicked:hover {
+.table tbody tr td.date-range {
   background-color: rgba(255, 0, 0, 0.4);
 }
 
+.table tbody tr td.date-hover {
+  background-color: #CCC;
+}

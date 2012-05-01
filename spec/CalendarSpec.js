@@ -20,7 +20,7 @@
         return container.calendar({});
       });
     });
-    return describe("basic rendering", function() {
+    describe("basic rendering", function() {
       beforeEach(function() {
         return container.calendar();
       });
@@ -66,6 +66,190 @@
         expect(container).toContain("td[data-date=2012-06-09][class=date-next-month]");
         expect(container).toContain("td[data-date=2012-06-10][class=date-next-month]");
         return expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]");
+      });
+    });
+    return describe("highlighting", function() {
+      var startDate;
+      startDate = void 0;
+      beforeEach(function() {
+        container.calendar();
+        return startDate = container.find('td[data-date=2012-05-11]');
+      });
+      describe("unselected dates", function() {
+        it("should add the date-hover class to dates on mouse over", function() {
+          startDate.mouseenter();
+          expect(container).toContain("td[data-date=2012-05-11].date-hover");
+          startDate.mouseleave();
+          return expect(container).not.toContain("td[data-date=2012-05-11].date-hover");
+        });
+        it("should add the date-range-start class to dates when clicked once", function() {
+          startDate.click();
+          return expect(container).toContain("td[data-date=2012-05-11].date-range-start");
+        });
+        return it("should add the date-selected class to dates when clicked twice", function() {
+          startDate.click();
+          startDate.click();
+          expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
+          return expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        });
+      });
+      describe("selected dates", function() {
+        beforeEach(function() {
+          return startDate.addClass('date-selected');
+        });
+        it("should add the date-hover class to dates on mouse over", function() {
+          expect(container).toContain("td[data-date=2012-05-11].date-selected");
+          startDate.mouseenter();
+          expect(container).toContain("td[data-date=2012-05-11].date-selected.date-hover");
+          startDate.mouseleave();
+          expect(container).not.toContain("td[data-date=2012-05-11].date-hover.date-selected");
+          return expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        });
+        it("should add the date-range-start class to dates when clicked once", function() {
+          startDate.click();
+          return expect(container).toContain("td[data-date=2012-05-11].date-selected.date-range-start");
+        });
+        return it("should remove the date-selected class to dates when clicked twice", function() {
+          startDate.click();
+          startDate.click();
+          expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
+          return expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        });
+      });
+      describe("range selection", function() {
+        var endDate;
+        endDate = void 0;
+        beforeEach(function() {
+          return startDate.click();
+        });
+        describe("forward on the same week", function() {
+          beforeEach(function() {
+            return endDate = container.find('td[data-date=2012-05-13]');
+          });
+          it("should add the date-range class to all dates between that and the hovered date", function() {
+            endDate.mouseenter();
+            expect(container).toContain("td[data-date=2012-05-11].date-range-start.date-range");
+            expect(container).toContain("td[data-date=2012-05-12].date-range");
+            return expect(container).toContain("td[data-date=2012-05-13].date-range.date-hover");
+          });
+          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-12].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+          });
+        });
+        describe("forward on a different week", function() {
+          beforeEach(function() {
+            return endDate = container.find('td[data-date=2012-05-15]');
+          });
+          it("should add the date-range class to all dates between that and the hovered date", function() {
+            endDate.mouseenter();
+            expect(container).toContain("td[data-date=2012-05-11].date-range-start.date-range");
+            expect(container).toContain("td[data-date=2012-05-12].date-range");
+            expect(container).toContain("td[data-date=2012-05-13].date-range");
+            expect(container).toContain("td[data-date=2012-05-14].date-range");
+            return expect(container).toContain("td[data-date=2012-05-15].date-range.date-hover");
+          });
+          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-12].date-selected");
+            expect(container).toContain("td[data-date=2012-05-13].date-selected");
+            expect(container).toContain("td[data-date=2012-05-14].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-15].date-selected.date-hover");
+          });
+        });
+        describe("backward on the same week", function() {
+          beforeEach(function() {
+            return endDate = container.find('td[data-date=2012-05-09]');
+          });
+          it("should add the date-range class to all dates between that and the hovered date", function() {
+            endDate.mouseenter();
+            expect(container).toContain("td[data-date=2012-05-11].date-range-start.date-range");
+            expect(container).toContain("td[data-date=2012-05-10].date-range");
+            return expect(container).toContain("td[data-date=2012-05-09].date-range.date-hover");
+          });
+          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-10].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-09].date-selected.date-hover");
+          });
+        });
+        return describe("backward on a different week", function() {
+          beforeEach(function() {
+            return endDate = container.find('td[data-date=2012-05-05]');
+          });
+          it("should add the date-range class to all dates between that and the hovered date", function() {
+            endDate.mouseenter();
+            expect(container).toContain("td[data-date=2012-05-11].date-range-start.date-range");
+            expect(container).toContain("td[data-date=2012-05-10].date-range");
+            expect(container).toContain("td[data-date=2012-05-09].date-range");
+            expect(container).toContain("td[data-date=2012-05-08].date-range");
+            expect(container).toContain("td[data-date=2012-05-07].date-range");
+            expect(container).toContain("td[data-date=2012-05-06].date-range");
+            return expect(container).toContain("td[data-date=2012-05-05].date-range.date-hover");
+          });
+          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-10].date-selected");
+            expect(container).toContain("td[data-date=2012-05-09].date-selected");
+            expect(container).toContain("td[data-date=2012-05-08].date-selected");
+            expect(container).toContain("td[data-date=2012-05-07].date-selected");
+            expect(container).toContain("td[data-date=2012-05-06].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover");
+          });
+        });
+      });
+      return describe("range unselection", function() {
+        var endDate;
+        endDate = void 0;
+        beforeEach(function() {
+          return endDate = container.find('td[data-date=2012-05-13]');
+        });
+        return describe("forward on the same week", function() {
+          it("should remove the date-selected class to all dates between that and the clicked date", function() {
+            startDate.click();
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-12].date-selected");
+            expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+            startDate.click();
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
+            expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-13].date-hover");
+          });
+          return it("should toggle the date-selected class to all dates between that and the clicked date", function() {
+            var midDate;
+            startDate.click();
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-12].date-selected");
+            expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+            midDate = container.find('td[data-date=2012-05-12]');
+            midDate.click();
+            midDate.click();
+            expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
+            startDate.click();
+            endDate.mouseenter();
+            endDate.click();
+            expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+            expect(container).toContain("td[data-date=2012-05-12].date-selected");
+            expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
+            return expect(container).toContain("td[data-date=2012-05-13].date-hover");
+          });
+        });
       });
     });
   });
