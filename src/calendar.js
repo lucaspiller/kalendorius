@@ -82,20 +82,29 @@
   };
 
   $.fn.calendar = function(options) {
-    var options = options || {};
+    var c = $(this);
 
-    var table = _renderMonth(new Date());
-    this.append(table);
+    var options = options || {};
+    options.months = typeof options.months !== "undefined" && options.months !== null ? options.months : 1;
+
+    var startDate = new Date();
+
+    for (var month = 0; month < options.months; month++) {
+      var currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + month, 1);
+
+      var table = _renderMonth(currentMonth);
+      c.append(table);
+    }
 
     var rangeStart = undefined;
 
-    this.find('td')
+    c.find('td')
       .mouseenter(function() {
         var $this = $(this);
         $this.addClass('date-hover');
         if (rangeStart !== undefined) {
-          table.find('td').removeClass('date-range');
-          _between(table.find('td'), rangeStart, $this).addClass('date-range');
+          c.find('td').removeClass('date-range');
+          _between(c.find('td'), rangeStart, $this).addClass('date-range');
         }
       }).mouseleave(function() {
         var $this = $(this);
@@ -104,12 +113,12 @@
         var $this = $(this);
         if ($this.hasClass('date-range-start')) {
           rangeStart = undefined;
-          table.find('td').removeClass('date-range');
+          c.find('td').removeClass('date-range');
           $this.removeClass('date-range-start');
           $this.toggleClass('date-selected');
         } else if (rangeStart) {
           rangeStart = undefined;
-          table.find('td.date-range')
+          c.find('td.date-range')
             .toggleClass('date-selected')
             .removeClass('date-range-start')
             .removeClass('date-range');
