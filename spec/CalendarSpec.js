@@ -282,15 +282,11 @@
         expect(container).toContain("table[data-month=2012-06-01]");
         return expect(container).toContain("table[data-month=2012-07-01]");
       });
-      return describe("duplicated dates", function() {
-        var date1, date2;
-        date1 = void 0;
-        date2 = void 0;
-        beforeEach(function() {
+      return describe("duplicated dates across a month boundary", function() {
+        it("should be kept in sync", function() {
+          var date1, date2;
           date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-06-03]");
-          return date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-03]");
-        });
-        return it("should keep selected dates in sync", function() {
+          date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-03]");
           date2.click();
           date2.click();
           expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected");
@@ -299,6 +295,46 @@
           date2.click();
           expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected");
           return expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected");
+        });
+        return it("should be selected by ranges correctly", function() {
+          var date1, date2;
+          date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-05-31]");
+          date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-01]");
+          date1.click();
+          date2.mouseenter();
+          expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-31].date-range-start.date-range");
+          expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-01].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-02].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-04].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-05].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-06].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-07].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-08].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-09].date-range");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-10].date-range");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-28].date-range");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-29].date-range");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-30].date-range");
+          expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-range");
+          expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-range.date-hover");
+          date2.click();
+          expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-31].date-selected");
+          expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-01].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-02].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-04].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-05].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-06].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-07].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-08].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-09].date-selected");
+          expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-10].date-selected");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-28].date-selected");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-29].date-selected");
+          expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-30].date-selected");
+          expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-selected");
+          return expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-selected.date-hover");
         });
       });
     });

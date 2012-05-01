@@ -53,8 +53,11 @@
     return table;
   };
 
-  var _toggleDateSelected = function(dateString) {
-    c.find('td[data-date=' + dateString + ']').toggleClass('date-selected');
+  var _toggleDateClass = function(selection, className) {
+    selection.each(function() {
+      var date = $(this).attr('data-date');
+      c.find('td[data-date=' + date + ']').toggleClass(className);
+    });
   };
 
   //
@@ -111,7 +114,7 @@
           $this.addClass('date-hover');
           if (rangeStart !== undefined) {
             c.find('td').removeClass('date-range');
-            _between(c.find('td'), rangeStart, $this).addClass('date-range');
+            _toggleDateClass(_between(c.find('td.date-current-month'), rangeStart, $this), 'date-range');
           }
         }
       }).mouseleave(function() {
@@ -123,15 +126,13 @@
           rangeStart = undefined;
           c.find('td').removeClass('date-range');
           $this.removeClass('date-range-start');
-          _toggleDateSelected($this.attr('data-date'));
+          _toggleDateClass($this, 'date-selected');
         } else if (rangeStart) {
           rangeStart = undefined;
+          _toggleDateClass(c.find('td.date-range.date-current-month'), 'date-selected');
           c.find('td.date-range')
             .removeClass('date-range-start')
-            .removeClass('date-range').each(function() {
-              var date = $(this).attr('data-date');
-              _toggleDateSelected(date);
-            });
+            .removeClass('date-range');
         } else {
           if ($this.hasClass('date-current-month')) {
             $this.addClass('date-range-start');

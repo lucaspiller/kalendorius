@@ -294,17 +294,12 @@ describe "CalendarSpec", ->
       expect(container).toContain("table[data-month=2012-06-01]")
       expect(container).toContain("table[data-month=2012-07-01]")
 
-    describe "duplicated dates", ->
-      date1 = undefined
-      date2 = undefined
-
-      beforeEach ->
+    describe "duplicated dates across a month boundary", ->
+      it "should be kept in sync", ->
         date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-06-03]")
         date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-03]")
 
-      it "should keep selected dates in sync", ->
         # date1 is not clickable
-
         date2.click()
         date2.click()
 
@@ -316,3 +311,48 @@ describe "CalendarSpec", ->
 
         expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected")
         expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-06-03].date-selected")
+
+      it "should be selected by ranges correctly", ->
+        date1 = container.find("table[data-month=2012-05-01] td[data-date=2012-05-31]")
+        date2 = container.find("table[data-month=2012-06-01] td[data-date=2012-06-01]")
+
+        date1.click()
+        date2.mouseenter()
+
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-31].date-range-start.date-range")
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-01].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-02].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-04].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-05].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-06].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-07].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-08].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-09].date-range")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-10].date-range")
+
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-28].date-range")
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-29].date-range")
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-30].date-range")
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-range")
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-range.date-hover")
+
+        date2.click()
+
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-05-31].date-selected")
+        expect(container).toContain("table[data-month=2012-05-01] td[data-date=2012-06-01].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-02].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-03].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-04].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-05].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-06].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-07].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-08].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-09].date-selected")
+        expect(container).not.toContain("table[data-month=2012-05-01] td[data-date=2012-06-10].date-selected")
+
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-28].date-selected")
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-29].date-selected")
+        expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-30].date-selected")
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-selected")
+        expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-selected.date-hover")
