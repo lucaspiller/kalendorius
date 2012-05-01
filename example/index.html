@@ -11,7 +11,9 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $('#calendar').calendar({
-          months: 3
+          months: 3,
+          tableClass: 'table table-bordered',
+          date: new Date(2012, 8, 23) // 23rd September 2012
         });
       });
     </script>

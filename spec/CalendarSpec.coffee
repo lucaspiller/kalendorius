@@ -367,3 +367,16 @@ describe "CalendarSpec", ->
         expect(container).not.toContain("table[data-month=2012-06-01] td[data-date=2012-05-30].date-selected")
         expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-selected")
         expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-selected.date-hover")
+
+  describe "options", ->
+    it "should allow adding classes to the tables", ->
+      container.calendar({
+        tableClass: 'table table-bordered'
+      })
+      expect(container).toContain("table[data-month=2012-05-01].table.table-bordered")
+
+    it "should allow starting from a custom month", ->
+      container.calendar({
+        date: new Date(2012, 8, 23) # 23rd September 2012
+      })
+      expect(container).toContain("table[data-month=2012-09-01]")

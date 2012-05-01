@@ -1,13 +1,12 @@
 (function($){
   var c = undefined;
 
-  var _renderMonth = function(renderDate) {
+  var _renderMonth = function(renderDate, options) {
     var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
     var table = $('<table>')
                   .attr('data-month', _toYMD(startOfMonth))
-                  .addClass('table') // TODO move to options
-                  .addClass('table-bordered');
+                  .addClass(options.tableClass);
 
     // add table header
     var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -97,13 +96,12 @@
 
     var options = options || {};
     options.months = typeof options.months !== "undefined" && options.months !== null ? options.months : 1;
-
-    var startDate = new Date();
+    options.date = typeof options.date !== "undefined" && options.date !== null ? options.date : new Date();
 
     for (var month = 0; month < options.months; month++) {
-      var currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + month, 1);
+      var currentMonth = new Date(options.date.getFullYear(), options.date.getMonth() + month, 1);
 
-      var table = _renderMonth(currentMonth);
+      var table = _renderMonth(currentMonth, options);
       c.append(table);
     }
 

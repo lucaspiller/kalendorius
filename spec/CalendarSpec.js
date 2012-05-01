@@ -270,7 +270,7 @@
         });
       });
     });
-    return describe("multi-month view", function() {
+    describe("multi-month view", function() {
       beforeEach(function() {
         return container.calendar({
           months: 3
@@ -345,6 +345,20 @@
           expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-05-31].date-selected");
           return expect(container).toContain("table[data-month=2012-06-01] td[data-date=2012-06-01].date-selected.date-hover");
         });
+      });
+    });
+    return describe("options", function() {
+      it("should allow adding classes to the tables", function() {
+        container.calendar({
+          tableClass: 'table table-bordered'
+        });
+        return expect(container).toContain("table[data-month=2012-05-01].table.table-bordered");
+      });
+      return it("should allow starting from a custom month", function() {
+        container.calendar({
+          date: new Date(2012, 8, 23)
+        });
+        return expect(container).toContain("table[data-month=2012-09-01]");
       });
     });
   });
