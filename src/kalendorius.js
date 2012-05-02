@@ -14,9 +14,11 @@
 
     var head = $('<thead>');
     table.append(head);
+    var row = $('<tr>');
+    head.append(row);
     for (var day = 0; day < 7; day++) {
       var column = $('<th>').text(days[day]);
-      head.append(column);
+      row.append(column);
     }
 
     // get the previous sunday before the start of this month
