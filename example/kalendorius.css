@@ -1,50 +1,87 @@
-body {
-  width: 840px;
-  margin: 40px auto;
-}
-
-table {
+/* set large table size */
+.kal table.large-one.table {
   table-layout: fixed;
 }
 
-table td {
-  width: 50px;
+.kal table.large-one.table td span {
   height: 50px;
 }
 
-table th {
-  width: 120px;
+.kal table.large-one.table td, .kal table.large-one.table th {
+  text-align: right;
 }
 
-.table tbody tr:hover td,
-.table tbody tr:hover th {
+/* set small table size */
+.kal table.small-three.table {
+  width: 300px;
+  float: left;
+  margin-right: 20px;
+}
+
+.kal table.small-three.table:last-child {
+  margin-right: 0px;
+}
+
+.kal table.small-three.table td, .kal table.small-three.table th {
+  text-align: right;
+}
+
+/* disable bootstrap row highlighting */
+.kal .table tbody tr:hover td {
   background-color: transparent;
 }
 
-.table tbody tr td.date-prev-month, .table tbody tr td.date-next-month {
-  color: #ccc;
+/* disable bootstrap lines between rows */
+.kal .table thead tr th, .kal .table tbody tr td {
+  border: none;
 }
 
-.table tbody tr td.date-selected {
+/* add rounded corners around dates */
+.kal table tbody tr td span {
+  display: block;
+  width: 100%;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+/* add a background to dates in the current month */
+.kal table tbody tr td.date-current-month span {
+  background: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* fade out dates not in the current month */
+.kal .table tbody tr td.date-prev-month, .table tbody tr td.date-next-month {
+  color: #ddd;
+}
+
+/* mark today red if unselected */
+.kal .table tbody tr td.date-today span {
+  background-color: #E24170;
+}
+
+/* make selected dates outside of the month light green */
+.kal .table tbody tr td.date-selected span {
   background-color: rgba(0, 255, 0, 0.1);
 }
 
-.table tbody tr td.date-current-month.date-selected {
+/* mark selected dates in the current month green */
+.table tbody tr td.date-current-month.date-selected span {
   background-color: rgba(0, 255, 0, 0.4);
 }
 
-.table tbody tr td.date-range-start {
-  background-color: rgba(0, 0, 255, 0.4);
+/* mark dates in a range selection as light blue */
+.kal .table tbody tr td.date-current-month.date-range span {
+  background-color: #C4D4F0;
 }
 
-.table tbody tr td.date-range {
-  background-color: rgba(255, 0, 0, 0.1);
+/* mark dates at the beginning of a selection dark blue */
+.kal .table tbody tr td.date-current-month.date-range-start span {
+  background-color: #7F9EE0;
 }
 
-.table tbody tr td.date-current-month.date-range {
-  background-color: rgba(255, 0, 0, 0.4);
-}
-
-.table tbody tr td.date-hover {
-  background-color: #CCC;
+/* mark dates as hovered dark blue */
+.kal .table tbody tr td.date-current-month.date-hover span {
+  background-color: #7F9EE0;
 }

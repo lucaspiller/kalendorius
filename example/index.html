@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script type="text/javascript" src="../lib/jquery-1.7.1.js"></script>
@@ -8,28 +9,62 @@
     <link rel="stylesheet" href="kalendorius.css" />
   </head>
   <body>
-    <div class="btn-toolbar">
-      <div class="btn-group">
-        <button data-action="prev" class="btn">◄</button>
-        <button data-action="next" class="btn">►</button>
+    <div class="container">
+
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <button data-action="prev" class="btn">◄</button>
+          <button data-action="next" class="btn">►</button>
+        </div>
+        <div class="btn-group">
+          <button data-action="today" class="btn">Today</button>
+        </div>
       </div>
-      <div class="btn-group">
-        <button data-action="today" class="btn">Today</button>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $('.btn').click(function() {
+            var action = $(this).attr('data-action');
+            $('.kal').kalendorius(action);
+          });
+        });
+      </script>
+
+      <div>
+        <div class="page-header">
+          <h1>
+            Large 1 Month View
+            <small>For when you want to see the details</small>
+          </h1>
+        </div>
+        <div class="kal" id="c1"></div>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('#c1').kalendorius({
+              months: 1,
+              tableClass: 'large-one table'
+            });
+          });
+        </script>
+      </div>
+
+      <div>
+        <div class="page-header">
+          <h1>
+            Small 3 Month View
+            <small>For when you want to see an overview</small>
+          </h1>
+        </div>
+        <div class="kal" id="c2"></div>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('#c2').kalendorius({
+              months: 3,
+              tableClass: 'small-three table',
+              days: ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+            });
+          });
+        </script>
       </div>
     </div>
-    <div id="calendar"></div>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('#calendar').kalendorius({
-          months: 3,
-          tableClass: 'table table-bordered',
-          date: new Date(2012, 8, 23) // 23rd September 2012
-        });
-        $('.btn').click(function() {
-          var action = $(this).attr('data-action');
-          $('#calendar').kalendorius(action);
-        });
-      });
-    </script>
   </body>
 </html>
