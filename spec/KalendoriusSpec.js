@@ -54,7 +54,7 @@
         expect(container).not.toContain("td[data-date=2012-04-29].date-prev-month");
         return expect(container).toContain("td[data-date=2012-04-30].date-prev-month");
       });
-      return it("should contain the days of the next month in the last weeks", function() {
+      it("should contain the days of the next month in the last weeks", function() {
         expect(container).toContain("td[data-date=2012-06-01].date-next-month");
         expect(container).toContain("td[data-date=2012-06-02].date-next-month");
         expect(container).toContain("td[data-date=2012-06-03].date-next-month");
@@ -66,6 +66,9 @@
         expect(container).toContain("td[data-date=2012-06-09].date-next-month");
         expect(container).toContain("td[data-date=2012-06-10].date-next-month");
         return expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]");
+      });
+      return it("should add the class date-today for today", function() {
+        return expect(container).toContain("td[data-date=2012-05-01].date-today");
       });
     });
     describe("highlighting", function() {
@@ -378,7 +381,7 @@
         })()).toEqual(days);
       });
     });
-    return describe("moving between months", function() {
+    describe("moving between months", function() {
       beforeEach(function() {
         return container.kalendorius();
       });
@@ -419,6 +422,30 @@
         date.click();
         date.click();
         return expect(container).toContain("td[data-date=2012-05-11].date-selected");
+      });
+    });
+    return describe("multiple instances", function() {
+      var container2;
+      container2 = void 0;
+      beforeEach(function() {
+        container2 = $("<div>");
+        container.kalendorius();
+        return container2.kalendorius();
+      });
+      it("should allow them to be changed between independently", function() {
+        expect(container).toContain("table[data-month=2012-05-01]");
+        expect(container2).toContain("table[data-month=2012-05-01]");
+        container.kalendorius('next');
+        expect(container).toContain("table[data-month=2012-06-01]");
+        return expect(container2).toContain("table[data-month=2012-05-01]");
+      });
+      return it("should maintain a seperate state of selected dates", function() {
+        var date;
+        date = container.find('td[data-date=2012-05-11]');
+        date.click();
+        date.click();
+        expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        return expect(container2).not.toContain("td[data-date=2012-05-11].date-selected");
       });
     });
   });

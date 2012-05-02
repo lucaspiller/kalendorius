@@ -1,205 +1,224 @@
 (function($){
-  var c = undefined,
-      k = undefined;
-
-  var _renderMonth = function(renderDate, options) {
-    var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
-
-    var table = $('<table>')
-                  .attr('data-month', _toYMD(startOfMonth))
-                  .addClass(options.tableClass);
-
-
-    var head = $('<thead>');
-    table.append(head);
-    var row = $('<tr>');
-    head.append(row);
-    for (var day = 0; day < 7; day++) {
-      var column = $('<th>').text(options.days[day]);
-      row.append(column);
+  var Kalendorius = (function() {
+    function Kalendorius() {
     }
 
-    // get the previous sunday before the start of this month
-    // we pass this to new Date(y, m, d) to get the actual date this corresponds to
-    var firstDay = startOfMonth.getDate() - startOfMonth.getDay();
-    if (startOfMonth.getDay() == 0) {
-      firstDay -= 7;
-    }
+    Kalendorius.prototype._renderMonth = function(renderDate) {
+      var today = new Date();
+      var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
-    // be sane, start the week on monday
-    firstDay = firstDay + 1;
+      var table = $('<table>')
+                    .attr('data-month', this._toYMD(startOfMonth))
+                    .addClass(this.options.tableClass);
 
-    var body = $('<tbody>');
-    table.append(body);
 
-    var tr = undefined;
-    for (var day = 0; day < 42; day++) {
-      if (day % 7 == 0) {
-        tr = $('<tr>');
-        body.append(tr);
+      var head = $('<thead>');
+      table.append(head);
+      var row = $('<tr>');
+      head.append(row);
+      for (var day = 0; day < 7; day++) {
+        var column = $('<th>').text(this.options.days[day]);
+        row.append(column);
       }
 
-      var currentDate = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth(), firstDay + day);
-      var currentElement = $('<td>').attr('data-date', _toYMD(currentDate)).text(currentDate.getDate());
-
-      if (currentDate.getMonth() < startOfMonth.getMonth()) {
-        currentElement.addClass('date-prev-month');
-      } else if (currentDate.getMonth() > startOfMonth.getMonth()) {
-        currentElement.addClass('date-next-month');
-      } else {
-        currentElement.addClass('date-current-month');
+      // get the previous sunday before the start of this month
+      // we pass this to new Date(y, m, d) to get the actual date this corresponds to
+      var firstDay = startOfMonth.getDate() - startOfMonth.getDay();
+      if (startOfMonth.getDay() == 0) {
+        firstDay -= 7;
       }
-      tr.append(currentElement);
-    }
 
-    return table;
-  };
+      // be sane, start the week on monday
+      firstDay = firstDay + 1;
 
-  var _toggleSelected = function(selection) {
-    var unselected = c.find('td.date-selected');
-    for(var i = 0; i < unselected.length; i++) {
-      var date = $(unselected[i]).attr('data-date');
-      k.selected[date] = false;
-    }
+      var body = $('<tbody>');
+      table.append(body);
 
-    if (selection.length == 1) {
-      // toggle if only one selected
-      selection.each(function() {
-        var date = $(this).attr('data-date');
-        c.find('td[data-date=' + date + ']').toggleClass('date-selected')
-      });
-    } else if (selection.length == selection.filter('.date-selected').length) {
-      // if all selected, set all as unselected
-      selection.each(function() {
-        var date = $(this).attr('data-date');
-        c.find('td[data-date=' + date + ']').removeClass('date-selected')
-      });
-    } else {
-      // if some or none selected, set all as selected
-      selection.each(function() {
-        var date = $(this).attr('data-date');
-        c.find('td[data-date=' + date + ']').addClass('date-selected')
-      });
-    }
-
-    var selected = c.find('td.date-selected');
-    for(var i = 0; i < selected.length; i++) {
-      var date = $(selected[i]).attr('data-date');
-      k.selected[date] = true;
-    }
-  };
-
-  var _toggleRange = function(selection) {
-    selection.each(function() {
-      var date = $(this).attr('data-date');
-      c.find('td[data-date=' + date + ']').toggleClass('date-range')
-    });
-  };
-
-  var _render = function(options) {
-    c.html('');
-
-    for (var month = 0; month < options.months; month++) {
-      var currentMonth = new Date(options.date.getFullYear(), options.date.getMonth() + month, 1);
-      var table = _renderMonth(currentMonth, options);
-      c.append(table);
-    }
-
-    for (var date in k.selected) {
-      if (k.selected[date] === true) {
-        c.find('td[data-date=' + date + ']').addClass('date-selected')
-      }
-    }
-
-    var rangeStart = undefined;
-
-    c.find('td')
-      .mouseenter(function() {
-        var $this = $(this);
-        if ($this.hasClass('date-current-month')) {
-          $this.addClass('date-hover');
-          if (rangeStart !== undefined) {
-            c.find('td').removeClass('date-range');
-            _toggleRange(_between(c.find('td.date-current-month'), rangeStart, $this));
-          }
+      var tr = undefined;
+      for (var day = 0; day < 42; day++) {
+        if (day % 7 == 0) {
+          tr = $('<tr>');
+          body.append(tr);
         }
-      }).mouseleave(function() {
-        var $this = $(this);
-        $this.removeClass('date-hover');
-      }).click(function() {
-        var $this = $(this);
-        if ($this.hasClass('date-range-start')) {
-          rangeStart = undefined;
-          c.find('td').removeClass('date-range');
-          $this.removeClass('date-range-start');
-          _toggleSelected($this);
-        } else if (rangeStart) {
-          rangeStart = undefined;
-          _toggleSelected(c.find('td.date-range.date-current-month'));
-          c.find('td.date-range')
-            .removeClass('date-range-start')
-            .removeClass('date-range');
+
+        var currentDate = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth(), firstDay + day);
+        var currentElement = $('<td>').attr('data-date', this._toYMD(currentDate)).append($('<span>').text(currentDate.getDate()));
+
+        if (currentDate.getMonth() < startOfMonth.getMonth()) {
+          currentElement.addClass('date-prev-month');
+        } else if (currentDate.getMonth() > startOfMonth.getMonth()) {
+          currentElement.addClass('date-next-month');
         } else {
-          if ($this.hasClass('date-current-month')) {
-            $this.addClass('date-range-start');
-            rangeStart = $this;
+          currentElement.addClass('date-current-month');
+          if (currentDate.getDate() == today.getDate() && currentDate.getMonth() == today.getMonth() && currentDate.getFullYear() == today.getFullYear()) {
+            currentElement.addClass('date-today');
           }
         }
-        this.blur();
+        tr.append(currentElement);
+      }
+
+      return table;
+    };
+
+    Kalendorius.prototype._toggleSelected = function(selection) {
+      var _this = this;
+      var unselected = this.element.find('td.date-selected');
+      for(var i = 0; i < unselected.length; i++) {
+        var date = $(unselected[i]).attr('data-date');
+        _this.selected[date] = false;
+      }
+
+      if (selection.length == 1) {
+        // toggle if only one selected
+        selection.each(function() {
+          var date = $(this).attr('data-date');
+          _this.element.find('td[data-date=' + date + ']').toggleClass('date-selected')
+        });
+      } else if (selection.length == selection.filter('.date-selected').length) {
+        // if all selected, set all as unselected
+        selection.each(function() {
+          var date = $(this).attr('data-date');
+          _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
+        });
+      } else {
+        // if some or none selected, set all as selected
+        selection.each(function() {
+          var date = $(this).attr('data-date');
+          _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+        });
+      }
+
+      var selected = this.element.find('td.date-selected');
+      for(var i = 0; i < selected.length; i++) {
+        var date = $(selected[i]).attr('data-date');
+        _this.selected[date] = true;
+      }
+    };
+
+    Kalendorius.prototype._toggleRange = function(selection) {
+      var _this = this;
+      selection.each(function() {
+        var date = $(this).attr('data-date');
+        _this.element.find('td[data-date=' + date + ']').toggleClass('date-range')
       });
-  }
+    };
 
-  //
-  // extensions
-  //
+    Kalendorius.prototype.render = function() {
+      var _this = this;
+      this.element.html('');
 
-  // returns the elements in the jquery
-  // selection between elm0 and elm1
-  var _between = function (selection, elm0, elm1) {
-    var index0 = selection.index(elm0);
-    var index1 = selection.index(elm1);
+      for (var month = 0; month < this.options.months; month++) {
+        var currentMonth = new Date(this.options.date.getFullYear(), this.options.date.getMonth() + month, 1);
+        var table = this._renderMonth(currentMonth);
+        this.element.append(table);
+      }
 
-    if (index0 <= index1)
-      return selection.slice(index0, index1 + 1);
-    else
-      return selection.slice(index1, index0 + 1);
-  };
+      for (var date in this.selected) {
+        if (this.selected[date] === true) {
+          this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+        }
+      }
 
-  // formats a date in YYYY-MM-DD format
-  // (including leading zeros)
-  var _toYMD = function(date) {
-    var y = date.getFullYear();
+      var rangeStart = undefined;
 
-    var m = date.getMonth() + 1; // WHY??!?!??!?!?!?
-    m = (m < 10) ? "0" + m : m;
+      this.element.find('td')
+        .mouseenter(function() {
+          var $this = $(this);
+          if ($this.hasClass('date-current-month')) {
+            $this.addClass('date-hover');
+            if (rangeStart !== undefined) {
+              _this.element.find('td').removeClass('date-range');
+              _this._toggleRange(_this._between(_this.element.find('td.date-current-month'), rangeStart, $this));
+            }
+          }
+        }).mouseleave(function() {
+          var $this = $(this);
+          $this.removeClass('date-hover');
+        }).click(function() {
+          var $this = $(this);
+          if ($this.hasClass('date-range-start')) {
+            rangeStart = undefined;
+            _this.element.find('td').removeClass('date-range');
+            $this.removeClass('date-range-start');
+            _this._toggleSelected($this);
+          } else if (rangeStart) {
+            rangeStart = undefined;
+            _this._toggleSelected(_this.element.find('td.date-range.date-current-month'));
+            _this.element.find('td.date-range')
+              .removeClass('date-range-start')
+              .removeClass('date-range');
+          } else {
+            if ($this.hasClass('date-current-month')) {
+              $this.addClass('date-range-start');
+              rangeStart = $this;
+            }
+          }
+          this.blur();
+        });
+    };
 
-    var d = date.getDate();
-    d = (d < 10) ? "0" + d : d;
+    //
+    // extensions
+    //
 
-    return y + "-" + m + "-" + d;
-  };
+    // returns the elements in the jquery
+    // selection between elm0 and elm1
+    Kalendorius.prototype._between = function (selection, elm0, elm1) {
+      var index0 = selection.index(elm0);
+      var index1 = selection.index(elm1);
+
+      if (index0 <= index1)
+        return selection.slice(index0, index1 + 1);
+      else
+        return selection.slice(index1, index0 + 1);
+    };
+
+    // formats a date in YYYY-MM-DD format
+    // (including leading zeros)
+    Kalendorius.prototype._toYMD = function(date) {
+      var y = date.getFullYear();
+
+      var m = date.getMonth() + 1; // WHY??!?!??!?!?!?
+      m = (m < 10) ? "0" + m : m;
+
+      var d = date.getDate();
+      d = (d < 10) ? "0" + d : d;
+
+      return y + "-" + m + "-" + d;
+    };
+
+    return Kalendorius;
+  })();
 
   $.fn.kalendorius = function(options) {
-    c = this;
-    if (options == "next") {
-      k.options.date = new Date(k.options.date.getFullYear(), k.options.date.getMonth() + 1, 1);
-      _render(k.options);
-    } else if (options === "prev") {
-      k.options.date = new Date(k.options.date.getFullYear(), k.options.date.getMonth() - 1, 1);
-      _render(k.options);
-    } else if (options === "today") {
-      k.options.date = new Date();
-      _render(k.options);
-    } else {
-      k = {};
-      k.selected = {};
-      k.options = options || {};
-      k.options.months = typeof k.options.months !== "undefined" && k.options.months !== null ? k.options.months : 1;
-      k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
-      k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    this.each(function(_, element) {
+      var element = $(element);
+      var k = element.data('kalendorius');
+      if (typeof k === 'undefined') {
+        k = new Kalendorius();
+        k.element = element;
+        k.options = {};
+        element.data('kalendorius', k);
+      }
+      if (options == "next") {
+        k.options.date = new Date(k.options.date.getFullYear(), k.options.date.getMonth() + 1, 1);
+        k.render();
+      } else if (options === "prev") {
+        k.options.date = new Date(k.options.date.getFullYear(), k.options.date.getMonth() - 1, 1);
+        k.render();
+      } else if (options === "today") {
+        k.options.date = new Date();
+        k.render();
+      } else {
+        k.selected = {};
+        k.options = options || {};
+        k.options.months = typeof k.options.months !== "undefined" && k.options.months !== null ? k.options.months : 1;
+        k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
+        k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-      _render(k.options);
-    }
+        k.render();
+      }
+    });
 
     return true;
   };

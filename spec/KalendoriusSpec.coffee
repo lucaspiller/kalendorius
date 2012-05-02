@@ -62,6 +62,9 @@ describe "KalendoriusSpec", ->
 
       expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]")
 
+    it "should add the class date-today for today", ->
+      expect(container).toContain("td[data-date=2012-05-01].date-today")
+
   describe "highlighting", ->
     startDate = undefined
 
@@ -443,3 +446,24 @@ describe "KalendoriusSpec", ->
       date.click()
       expect(container).toContain("td[data-date=2012-05-11].date-selected")
 
+  describe "multiple instances", ->
+    container2 = undefined
+
+    beforeEach ->
+      container2 = $("<div>")
+      container.kalendorius()
+      container2.kalendorius()
+
+    it "should allow them to be changed between independently", ->
+      expect(container).toContain("table[data-month=2012-05-01]")
+      expect(container2).toContain("table[data-month=2012-05-01]")
+      container.kalendorius('next')
+      expect(container).toContain("table[data-month=2012-06-01]")
+      expect(container2).toContain("table[data-month=2012-05-01]")
+
+    it "should maintain a seperate state of selected dates", ->
+      date = container.find('td[data-date=2012-05-11]')
+      date.click()
+      date.click()
+      expect(container).toContain("td[data-date=2012-05-11].date-selected")
+      expect(container2).not.toContain("td[data-date=2012-05-11].date-selected")
