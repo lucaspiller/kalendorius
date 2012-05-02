@@ -9,15 +9,13 @@
                   .attr('data-month', _toYMD(startOfMonth))
                   .addClass(options.tableClass);
 
-    // add table header
-    var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     var head = $('<thead>');
     table.append(head);
     var row = $('<tr>');
     head.append(row);
     for (var day = 0; day < 7; day++) {
-      var column = $('<th>').text(days[day]);
+      var column = $('<th>').text(options.days[day]);
       row.append(column);
     }
 
@@ -198,6 +196,7 @@
       k.options = options || {};
       k.options.months = typeof k.options.months !== "undefined" && k.options.months !== null ? k.options.months : 1;
       k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
+      k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
       _render(k.options);
     }

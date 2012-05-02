@@ -354,11 +354,28 @@
         });
         return expect(container).toContain("table[data-month=2012-05-01].table.table-bordered");
       });
-      return it("should allow starting from a custom month", function() {
+      it("should allow starting from a custom month", function() {
         container.kalendorius({
           date: new Date(2012, 8, 23)
         });
         return expect(container).toContain("table[data-month=2012-09-01]");
+      });
+      return it("should allow custom days names to be passed in", function() {
+        var days, header;
+        days = ['pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis', 'sekmadienis'];
+        container.kalendorius({
+          days: days
+        });
+        return expect((function() {
+          var _i, _len, _ref, _results;
+          _ref = container.find("th");
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            header = _ref[_i];
+            _results.push($(header).text());
+          }
+          return _results;
+        })()).toEqual(days);
       });
     });
     return describe("moving between months", function() {

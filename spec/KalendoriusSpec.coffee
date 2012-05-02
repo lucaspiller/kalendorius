@@ -381,6 +381,23 @@ describe "KalendoriusSpec", ->
       })
       expect(container).toContain("table[data-month=2012-09-01]")
 
+    it "should allow custom days names to be passed in", ->
+      days = [
+        'pirmadienis',
+        'antradienis',
+        'trečiadienis',
+        'ketvirtadienis',
+        'penktadienis',
+        'šeštadienis',
+        'sekmadienis'
+      ]
+      container.kalendorius({
+        days: days
+      })
+      expect(
+          $(header).text() for header in container.find("th")
+        ).toEqual days
+
   describe "moving between months", ->
     beforeEach ->
       container.kalendorius()
@@ -425,3 +442,4 @@ describe "KalendoriusSpec", ->
       date.click()
       date.click()
       expect(container).toContain("td[data-date=2012-05-11].date-selected")
+
