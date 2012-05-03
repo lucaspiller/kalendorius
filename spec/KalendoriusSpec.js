@@ -26,7 +26,7 @@
         return container.kalendorius();
       });
       it("should contain the month header", function() {
-        return expect(container.find('div[data-month=2012-05-01] div.date-month-header').text()).toEqual('May');
+        return expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('May');
       });
       it("should contain day headers", function() {
         var header;
@@ -365,9 +365,9 @@
         return expect(container).toContain("div[data-month=2012-07-01] td[data-date=2012-08-05]");
       });
       it("should contain the month header for each month", function() {
-        expect(container.find('div[data-month=2012-05-01] div.date-month-header').text()).toEqual('May');
-        expect(container.find('div[data-month=2012-06-01] div.date-month-header').text()).toEqual('June');
-        return expect(container.find('div[data-month=2012-07-01] div.date-month-header').text()).toEqual('July');
+        expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('May');
+        expect(container.find('div[data-month=2012-06-01] div.month-header').text()).toEqual('June');
+        return expect(container.find('div[data-month=2012-07-01] div.month-header').text()).toEqual('July');
       });
       return describe("duplicated dates across a month boundary", function() {
         it("should be kept in sync", function() {
@@ -470,7 +470,7 @@
         expect(container).toContain("div[data-month=2012-05-01]");
         container.kalendorius('next');
         expect(container).toContain("div[data-month=2012-06-01]");
-        return expect(container.find('div[data-month=2012-06-01] div.date-month-header').text()).toEqual('June');
+        return expect(container.find('div[data-month=2012-06-01] div.month-header').text()).toEqual('June');
       });
       it("should fire the kalendorius:change event when moving to the next month", function() {
         spyOnEvent(container, 'kalendorius:change');
@@ -481,7 +481,7 @@
         expect(container).toContain("div[data-month=2012-05-01]");
         container.kalendorius('prev');
         expect(container).toContain("div[data-month=2012-04-01]");
-        return expect(container.find('div[data-month=2012-04-01] div.date-month-header').text()).toEqual('April');
+        return expect(container.find('div[data-month=2012-04-01] div.month-header').text()).toEqual('April');
       });
       it("should fire the kalendorius:change event when moving to the next month", function() {
         spyOnEvent(container, 'kalendorius:change');
@@ -493,7 +493,7 @@
         Timecop.freeze(new Date(2012, 6, 1, 10, 48));
         container.kalendorius('today');
         expect(container).toContain("div[data-month=2012-07-01]");
-        return expect(container.find('div[data-month=2012-07-01] div.date-month-header').text()).toEqual('July');
+        return expect(container.find('div[data-month=2012-07-01] div.month-header').text()).toEqual('July');
       });
       it("should fire the kalendorius:change event when moving to the next month", function() {
         spyOnEvent(container, 'kalendorius:change');

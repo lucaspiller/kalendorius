@@ -12,7 +12,7 @@
                     .attr('data-month', this._toYMD(startOfMonth));
 
       var monthHeader = $('<div>')
-                    .addClass('date-month-header')
+                    .addClass('month-header')
                     .text(this.options.monthNames[renderDate.getMonth()]);
       month.append(monthHeader);
 
