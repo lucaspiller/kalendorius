@@ -538,7 +538,7 @@ describe "KalendoriusSpec", ->
 
   describe "moving between months", ->
     beforeEach ->
-      instace = instance = container.kalendorius()
+      instance = container.kalendorius()
 
     it "should move to the next month", ->
       expect(container).toContain("div[data-month=2012-05-01]")
@@ -549,6 +549,7 @@ describe "KalendoriusSpec", ->
     it "should fire the change event when moving to the next month", ->
        triggered = false
        instance.onChange = ->
+         expect(instance.getMonth()).toEqual('June')
          triggered = true
 
        container.kalendorius('next')
@@ -564,6 +565,7 @@ describe "KalendoriusSpec", ->
     it "should fire the change event when moving to the previous month", ->
       triggered = false
       instance.onChange = ->
+        expect(instance.getMonth()).toEqual('April')
         triggered = true
 
       container.kalendorius('prev')
@@ -581,9 +583,11 @@ describe "KalendoriusSpec", ->
     it "should fire the change event when moving to today", ->
       triggered = false
       instance.onChange = ->
+        expect(instance.getMonth()).toEqual('July')
         triggered = true
 
-      container.kalendorius('tody')
+      Timecop.freeze new Date(2012, 6, 1, 10, 48) # 1st July 2012
+      container.kalendorius('today')
 
       expect(triggered).toEqual(true)
 
@@ -676,3 +680,18 @@ describe "KalendoriusSpec", ->
       date2.click()
 
       expect(instance.getSelected()).toEqual(['2012-05-02', '2012-05-11', '2012-05-12', '2012-05-13', '2012-05-20'])
+
+  describe "#getMonth", ->
+    beforeEach ->
+      instance = container.kalendorius()
+
+    it "should return the name of the current month", ->
+      expect(instance.getMonth()).toEqual('May')
+
+    it "should return the name of the current month after moving to the next month", ->
+      container.kalendorius('next')
+      expect(instance.getMonth()).toEqual('June')
+
+    it "should return the name of the current month after moving to the last month", ->
+      container.kalendorius('prev')
+      expect(instance.getMonth()).toEqual('April')

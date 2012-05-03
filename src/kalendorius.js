@@ -136,7 +136,11 @@
         dates.push(date);
       }
       return dates.sort();
-    }
+    };
+
+    Kalendorius.prototype.getMonth = function() {
+      return this.options.monthNames[this.options.date.getMonth()];
+    };
 
     Kalendorius.prototype.render = function() {
       var _this = this;

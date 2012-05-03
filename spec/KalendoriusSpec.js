@@ -505,8 +505,7 @@
     });
     describe("moving between months", function() {
       beforeEach(function() {
-        var instace;
-        return instace = instance = container.kalendorius();
+        return instance = container.kalendorius();
       });
       it("should move to the next month", function() {
         expect(container).toContain("div[data-month=2012-05-01]");
@@ -518,6 +517,7 @@
         var triggered;
         triggered = false;
         instance.onChange = function() {
+          expect(instance.getMonth()).toEqual('June');
           return triggered = true;
         };
         container.kalendorius('next');
@@ -533,6 +533,7 @@
         var triggered;
         triggered = false;
         instance.onChange = function() {
+          expect(instance.getMonth()).toEqual('April');
           return triggered = true;
         };
         container.kalendorius('prev');
@@ -549,9 +550,11 @@
         var triggered;
         triggered = false;
         instance.onChange = function() {
+          expect(instance.getMonth()).toEqual('July');
           return triggered = true;
         };
-        container.kalendorius('tody');
+        Timecop.freeze(new Date(2012, 6, 1, 10, 48));
+        container.kalendorius('today');
         return expect(triggered).toEqual(true);
       });
       it("should maintain selected dates when moving between months", function() {
@@ -601,7 +604,7 @@
         return expect(container2).not.toContain("td[data-date=2012-05-11].date-selected");
       });
     });
-    return describe("#getSelected", function() {
+    describe("#getSelected", function() {
       beforeEach(function() {
         return instance = container.kalendorius();
       });
@@ -638,6 +641,22 @@
         date2.click();
         date2.click();
         return expect(instance.getSelected()).toEqual(['2012-05-02', '2012-05-11', '2012-05-12', '2012-05-13', '2012-05-20']);
+      });
+    });
+    return describe("#getMonth", function() {
+      beforeEach(function() {
+        return instance = container.kalendorius();
+      });
+      it("should return the name of the current month", function() {
+        return expect(instance.getMonth()).toEqual('May');
+      });
+      it("should return the name of the current month after moving to the next month", function() {
+        container.kalendorius('next');
+        return expect(instance.getMonth()).toEqual('June');
+      });
+      return it("should return the name of the current month after moving to the last month", function() {
+        container.kalendorius('prev');
+        return expect(instance.getMonth()).toEqual('April');
       });
     });
   });
