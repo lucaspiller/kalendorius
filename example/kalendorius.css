@@ -1,28 +1,28 @@
 /* set large table size */
-.kal table.large-one.table {
+.kal .large-one .table {
   table-layout: fixed;
 }
 
-.kal table.large-one.table td span {
+.kal .large-one .table td span {
   height: 50px;
 }
 
-.kal table.large-one.table td, .kal table.large-one.table th {
+.kal .large-one .table td, .kal .large-one .table th {
   text-align: right;
 }
 
 /* set small table size */
-.kal table.small-three.table {
-  width: 300px;
+.kal .small-three {
+  width: 290px;
   float: left;
   margin-right: 20px;
 }
 
-.kal table.small-three.table:last-child {
+.kal .small-three .table:last-child {
   margin-right: 0px;
 }
 
-.kal table.small-three.table td, .kal table.small-three.table th {
+.kal .small-three .table td, .kal .small-three .table th {
   text-align: right;
 }
 
@@ -34,6 +34,13 @@
 /* disable bootstrap lines between rows */
 .kal .table thead tr th, .kal .table tbody tr td {
   border: none;
+}
+
+.kal .month-header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-bottom: 10px;
 }
 
 /* add rounded corners around dates */
