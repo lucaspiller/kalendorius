@@ -71,22 +71,18 @@
 
     Kalendorius.prototype._toggleSelected = function(selection) {
       var _this = this;
-      var unselected = this.element.find('td.date-selected');
-      for(var i = 0; i < unselected.length; i++) {
-        var date = $(unselected[i]).attr('data-date');
-        _this.selected[date] = false;
-      }
-
       if (selection.length == 1) {
         // toggle if only one selected
         var date = selection.attr('data-date');
         if (selection.hasClass('date-selected')) {
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
+          _this._updateSelected();
           if (typeof _this.onUnselected !== 'undefined') {
             _this.onUnselected();
           }
         } else {
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+          _this._updateSelected();
           if (typeof _this.onSelected !== 'undefined') {
             _this.onSelected();
           }
@@ -97,6 +93,7 @@
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
         });
+        _this._updateSelected();
         if (typeof _this.onUnselected !== 'undefined') {
           _this.onUnselected();
         }
@@ -106,17 +103,24 @@
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
         });
+        _this._updateSelected();
         if (typeof _this.onSelected !== 'undefined') {
           _this.onSelected();
         }
       }
-
-      var selected = this.element.find('td.date-selected');
-      for(var i = 0; i < selected.length; i++) {
-        var date = $(selected[i]).attr('data-date');
-        _this.selected[date] = true;
-      }
     };
+
+    Kalendorius.prototype._updateSelected = function() {
+      var dates = this.element.find('td.date-current-month');
+      for(var i = 0; i < dates.length; i++) {
+        var date = $(dates[i]).attr('data-date');
+        if ($(dates[i]).hasClass('date-selected')) {
+          this.selected[date] = true;
+        } else {
+          delete this.selected[date];
+        }
+      }
+    }
 
     Kalendorius.prototype._toggleRange = function(selection) {
       var _this = this;

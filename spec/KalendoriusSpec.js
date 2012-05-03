@@ -103,6 +103,7 @@
           var triggered;
           triggered = false;
           instance.onSelected = function() {
+            expect(instance.getSelected()).toEqual(['2012-05-11']);
             return triggered = true;
           };
           startDate.click();
@@ -194,6 +195,7 @@
             var triggered;
             triggered = false;
             instance.onSelected = function() {
+              expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
               return triggered = true;
             };
             endDate.mouseenter();
@@ -226,6 +228,7 @@
             var triggered;
             triggered = false;
             instance.onSelected = function() {
+              expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
               return triggered = true;
             };
             endDate.mouseenter();
@@ -254,6 +257,7 @@
             var triggered;
             triggered = false;
             instance.onSelected = function() {
+              expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
             endDate.mouseenter();
@@ -290,6 +294,7 @@
             var triggered;
             triggered = false;
             instance.onSelected = function() {
+              expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
             endDate.mouseenter();
@@ -362,6 +367,7 @@
           var triggered;
           triggered = false;
           instance.onSelected = function() {
+            expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
             return triggered = true;
           };
           endDate.mouseenter();
