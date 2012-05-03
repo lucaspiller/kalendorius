@@ -82,10 +82,14 @@
         var date = selection.attr('data-date');
         if (selection.hasClass('date-selected')) {
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
-          _this.element.trigger('kalendorius:unselected');
+          if (typeof _this.onUnselected !== 'undefined') {
+            _this.onUnselected();
+          }
         } else {
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
-          _this.element.trigger('kalendorius:selected');
+          if (typeof _this.onSelected !== 'undefined') {
+            _this.onSelected();
+          }
         }
       } else if (selection.length == selection.filter('.date-selected').length) {
         // if all selected, set all as unselected
@@ -93,14 +97,18 @@
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
         });
-        _this.element.trigger('kalendorius:unselected');
+        if (typeof _this.onUnselected !== 'undefined') {
+          _this.onUnselected();
+        }
       } else {
         // if some or none selected, set all as selected
         selection.each(function() {
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
         });
-        _this.element.trigger('kalendorius:selected');
+        if (typeof _this.onSelected !== 'undefined') {
+          _this.onSelected();
+        }
       }
 
       var selected = this.element.find('td.date-selected');
@@ -179,7 +187,9 @@
           this.blur();
         });
 
-        _this.element.trigger('kalendorius:change');
+        if (typeof _this.onChange !== 'undefined') {
+          _this.onChange();
+        }
     };
 
     //
@@ -243,7 +253,6 @@
         k.options.monthNames = typeof k.options.monthNames !== "undefined" && k.options.monthNames !== null ? k.options.monthNames : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         k.render();
-        element.trigger('kalendorius:ready');
       }
     });
 

@@ -19,7 +19,7 @@ describe "KalendoriusSpec", ->
 
   describe "basic rendering", ->
     beforeEach ->
-      container.kalendorius()
+      instance = container.kalendorius()
 
     it "should contain the month header", ->
       expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('May')
@@ -69,16 +69,11 @@ describe "KalendoriusSpec", ->
     it "should add the class date-today for today", ->
       expect(container).toContain("td[data-date=2012-05-01].date-today")
 
-    it "should fire the kalendorius:ready event", ->
-      spyOnEvent(container, 'kalendorius:ready')
-      container.kalendorius()
-      expect('kalendorius:ready').toHaveBeenTriggeredOn(container)
-
   describe "highlighting", ->
     startDate = undefined
 
     beforeEach ->
-      container.kalendorius()
+      instance = container.kalendorius()
       startDate = container.find('td[data-date=2012-05-11]')
 
     describe "unselected dates", ->
@@ -100,13 +95,15 @@ describe "KalendoriusSpec", ->
         expect(container).not.toContain("td[data-date=2012-05-11].date-range-start")
         expect(container).toContain("td[data-date=2012-05-11].date-selected")
 
-      it "should fire the kalendorius:selected event when clicked twice", ->
-        spyOnEvent(container, 'kalendorius:selected')
+      it "should fire the selected event when clicked twice", ->
+        triggered = false
+        instance.onSelected = ->
+          triggered = true
 
         startDate.click()
         startDate.click()
 
-        expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
+        expect(triggered).toEqual(true)
 
     describe "selected dates", ->
       beforeEach ->
@@ -140,13 +137,15 @@ describe "KalendoriusSpec", ->
         expect(container).not.toContain("td[data-date=2012-05-11].date-range-start")
         expect(container).not.toContain("td[data-date=2012-05-11].date-selected")
 
-      it "should fire the kalendorius:unselected event when clicked twice", ->
-        spyOnEvent(container, 'kalendorius:unselected')
+      it "should fire the unselected event when clicked twice", ->
+        triggered = false
+        instance.onUnselected = ->
+          triggered = true
 
         startDate.click()
         startDate.click()
 
-        expect('kalendorius:unselected').toHaveBeenTriggeredOn(container)
+        expect(triggered).toEqual(true)
 
       it "should not add the date-hover or date-selected class to dates in the last month", ->
         expect(container).toContain("td[data-date=2012-04-30].date-prev-month")
@@ -193,13 +192,15 @@ describe "KalendoriusSpec", ->
           expect(container).toContain("td[data-date=2012-05-12].date-selected")
           expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover")
 
-        it "should fire the kalendorius:selected event", ->
-          spyOnEvent(container, 'kalendorius:selected')
+        it "should fire the selected event", ->
+          triggered = false
+          instance.onSelected = ->
+            triggered = true
 
           endDate.mouseenter()
           endDate.click()
 
-          expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
+          expect(triggered).toEqual(true)
 
       describe "forward on a different week", ->
         beforeEach ->
@@ -224,13 +225,15 @@ describe "KalendoriusSpec", ->
           expect(container).toContain("td[data-date=2012-05-14].date-selected")
           expect(container).toContain("td[data-date=2012-05-15].date-selected.date-hover")
 
-        it "should fire the kalendorius:selected event", ->
-          spyOnEvent(container, 'kalendorius:selected')
+        it "should fire the selected event", ->
+          triggered = false
+          instance.onSelected = ->
+            triggered = true
 
           endDate.mouseenter()
           endDate.click()
 
-          expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
+          expect(triggered).toEqual(true)
 
       describe "backward on the same week", ->
         beforeEach ->
@@ -251,13 +254,15 @@ describe "KalendoriusSpec", ->
           expect(container).toContain("td[data-date=2012-05-10].date-selected")
           expect(container).toContain("td[data-date=2012-05-09].date-selected.date-hover")
 
-        it "should fire the kalendorius:selected event", ->
-          spyOnEvent(container, 'kalendorius:selected')
+        it "should fire the selected event", ->
+          triggered = false
+          instance.onSelected = ->
+            triggered = true
 
           endDate.mouseenter()
           endDate.click()
 
-          expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
+          expect(triggered).toEqual(true)
 
       describe "backward on a different week", ->
         beforeEach ->
@@ -286,13 +291,15 @@ describe "KalendoriusSpec", ->
           expect(container).toContain("td[data-date=2012-05-06].date-selected")
           expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover") 
 
-        it "should fire the kalendorius:selected event", ->
-          spyOnEvent(container, 'kalendorius:selected')
+        it "should fire the selected event", ->
+          triggered = false
+          instance.onSelected = ->
+            triggered = true
 
           endDate.mouseenter()
           endDate.click()
 
-          expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
+          expect(triggered).toEqual(true)
 
     describe "range unselection", ->
       endDate = undefined
@@ -322,13 +329,15 @@ describe "KalendoriusSpec", ->
           expect(container).not.toContain("td[data-date=2012-05-13].date-selected")
           expect(container).toContain("td[data-date=2012-05-13].date-hover")
 
-        it "should fire the kalendorius:unselected event", ->
-          spyOnEvent(container, 'kalendorius:unselected')
+        it "should fire the unselected event", ->
+          triggered = false
+          instance.onUnselected = ->
+            triggered = true
 
           endDate.mouseenter()
           endDate.click()
 
-          expect('kalendorius:unselected').toHaveBeenTriggeredOn(container)
+          expect(triggered).toEqual(true)
 
     describe "range partial selection", ->
       endDate = undefined
@@ -363,18 +372,19 @@ describe "KalendoriusSpec", ->
         expect(container).toContain("td[data-date=2012-05-13].date-selected")
         expect(container).toContain("td[data-date=2012-05-13].date-hover")
 
-      it "should fire the kalendorius:selected event", ->
-        spyOnEvent(container, 'kalendorius:selected')
+      it "should fire the selected event", ->
+        triggered = false
+        instance.onSelected = ->
+          triggered = true
 
         endDate.mouseenter()
         endDate.click()
 
-        expect('kalendorius:selected').toHaveBeenTriggeredOn(container)
-
+        expect(triggered).toEqual(true)
 
   describe "multi-month view", ->
     beforeEach ->
-      container.kalendorius({
+      instance = container.kalendorius({
         months: 3
       })
 
@@ -522,7 +532,7 @@ describe "KalendoriusSpec", ->
 
   describe "moving between months", ->
     beforeEach ->
-      container.kalendorius()
+      instace = instance = container.kalendorius()
 
     it "should move to the next month", ->
       expect(container).toContain("div[data-month=2012-05-01]")
@@ -530,10 +540,14 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-06-01]")
       expect(container.find('div[data-month=2012-06-01] div.month-header').text()).toEqual('June')
 
-    it "should fire the kalendorius:change event when moving to the next month", ->
-      spyOnEvent(container, 'kalendorius:change')
-      container.kalendorius('next')
-      expect('kalendorius:change').toHaveBeenTriggeredOn(container)
+    it "should fire the change event when moving to the next month", ->
+       triggered = false
+       instance.onChange = ->
+         triggered = true
+
+       container.kalendorius('next')
+
+       expect(triggered).toEqual(true)
 
     it "should move to the previous month", ->
       expect(container).toContain("div[data-month=2012-05-01]")
@@ -541,10 +555,14 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-04-01]")
       expect(container.find('div[data-month=2012-04-01] div.month-header').text()).toEqual('April')
 
-    it "should fire the kalendorius:change event when moving to the next month", ->
-      spyOnEvent(container, 'kalendorius:change')
+    it "should fire the change event when moving to the previous month", ->
+      triggered = false
+      instance.onChange = ->
+        triggered = true
+
       container.kalendorius('prev')
-      expect('kalendorius:change').toHaveBeenTriggeredOn(container)
+
+      expect(triggered).toEqual(true)
 
     it "should move to today", ->
       expect(container).toContain("div[data-month=2012-05-01]")
@@ -554,10 +572,14 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-07-01]")
       expect(container.find('div[data-month=2012-07-01] div.month-header').text()).toEqual('July')
 
-    it "should fire the kalendorius:change event when moving to the next month", ->
-      spyOnEvent(container, 'kalendorius:change')
-      container.kalendorius('today')
-      expect('kalendorius:change').toHaveBeenTriggeredOn(container)
+    it "should fire the change event when moving to today", ->
+      triggered = false
+      instance.onChange = ->
+        triggered = true
+
+      container.kalendorius('tody')
+
+      expect(triggered).toEqual(true)
 
     it "should maintain selected dates when moving between months", ->
       date = container.find('td[data-date=2012-05-11]')
