@@ -109,6 +109,14 @@
       });
     };
 
+    Kalendorius.prototype.getSelected = function() {
+      var dates = [];
+      for (var date in this.selected) {
+        dates.push(date);
+      }
+      return dates.sort();
+    }
+
     Kalendorius.prototype.render = function() {
       var _this = this;
       this.element.html('');
@@ -229,6 +237,10 @@
       }
     });
 
-    return true;
+    if (this.length == 1) {
+      return this.data('kalendorius');
+    } else {
+      return true;
+    }
   };
 })( jQuery );

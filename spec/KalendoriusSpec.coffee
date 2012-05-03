@@ -1,6 +1,6 @@
 describe "KalendoriusSpec", ->
   container = undefined
-  kalendorius = undefined
+  instance = undefined
 
   beforeEach ->
     Timecop.install()
@@ -567,3 +567,47 @@ describe "KalendoriusSpec", ->
       date.click()
       expect(container).toContain("td[data-date=2012-05-11].date-selected")
       expect(container2).not.toContain("td[data-date=2012-05-11].date-selected")
+
+  describe "#getSelected", ->
+    beforeEach ->
+      instance = container.kalendorius()
+
+    it "should return an empty list when nothing is selected", ->
+      expect(instance.getSelected()).toEqual([])
+
+    it "should return a one element list when one date is selected", ->
+      startDate = container.find('td[data-date=2012-05-11]')
+      startDate.click()
+      startDate.click()
+
+      expect(instance.getSelected()).toEqual(['2012-05-11'])
+
+    it "should return multi elements list when a range is selected", ->
+      startDate = container.find('td[data-date=2012-05-11]')
+      startDate.click()
+
+      endDate = container.find('td[data-date=2012-05-13]')
+      endDate.mouseover()
+      endDate.click()
+
+      expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
+
+    it "should return all selected dates in ascending order", ->
+      # select a range
+      startDate = container.find('td[data-date=2012-05-11]')
+      startDate.click()
+
+      endDate = container.find('td[data-date=2012-05-13]')
+      endDate.mouseover()
+      endDate.click()
+
+      # select some other dates
+      date1 = container.find('td[data-date=2012-05-20]')
+      date1.click()
+      date1.click()
+
+      date2 = container.find('td[data-date=2012-05-02]')
+      date2.click()
+      date2.click()
+
+      expect(instance.getSelected()).toEqual(['2012-05-02', '2012-05-11', '2012-05-12', '2012-05-13', '2012-05-20'])

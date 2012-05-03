@@ -2,9 +2,9 @@
 (function() {
 
   describe("KalendoriusSpec", function() {
-    var container, kalendorius;
+    var container, instance;
     container = void 0;
-    kalendorius = void 0;
+    instance = void 0;
     beforeEach(function() {
       Timecop.install();
       Timecop.freeze(new Date(2012, 4, 1, 10, 48));
@@ -506,7 +506,7 @@
         return expect(container).toContain("td[data-date=2012-05-11].date-selected");
       });
     });
-    return describe("multiple instances", function() {
+    describe("multiple instances", function() {
       var container2;
       container2 = void 0;
       beforeEach(function() {
@@ -528,6 +528,45 @@
         date.click();
         expect(container).toContain("td[data-date=2012-05-11].date-selected");
         return expect(container2).not.toContain("td[data-date=2012-05-11].date-selected");
+      });
+    });
+    return describe("#getSelected", function() {
+      beforeEach(function() {
+        return instance = container.kalendorius();
+      });
+      it("should return an empty list when nothing is selected", function() {
+        return expect(instance.getSelected()).toEqual([]);
+      });
+      it("should return a one element list when one date is selected", function() {
+        var startDate;
+        startDate = container.find('td[data-date=2012-05-11]');
+        startDate.click();
+        startDate.click();
+        return expect(instance.getSelected()).toEqual(['2012-05-11']);
+      });
+      it("should return multi elements list when a range is selected", function() {
+        var endDate, startDate;
+        startDate = container.find('td[data-date=2012-05-11]');
+        startDate.click();
+        endDate = container.find('td[data-date=2012-05-13]');
+        endDate.mouseover();
+        endDate.click();
+        return expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+      });
+      return it("should return all selected dates in ascending order", function() {
+        var date1, date2, endDate, startDate;
+        startDate = container.find('td[data-date=2012-05-11]');
+        startDate.click();
+        endDate = container.find('td[data-date=2012-05-13]');
+        endDate.mouseover();
+        endDate.click();
+        date1 = container.find('td[data-date=2012-05-20]');
+        date1.click();
+        date1.click();
+        date2 = container.find('td[data-date=2012-05-02]');
+        date2.click();
+        date2.click();
+        return expect(instance.getSelected()).toEqual(['2012-05-02', '2012-05-11', '2012-05-12', '2012-05-13', '2012-05-20']);
       });
     });
   });
