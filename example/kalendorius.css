@@ -1,3 +1,8 @@
+.events {
+  overflow: auto;
+  max-height: 100px;
+}
+
 /* set large table size */
 .kal .large-one .table {
   table-layout: fixed;
@@ -16,6 +21,10 @@
   width: 290px;
   float: left;
   margin-right: 20px;
+}
+
+.kal#c2 {
+  height: 350px;
 }
 
 .kal .small-three .table:last-child {

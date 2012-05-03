@@ -5,6 +5,15 @@
     <script type="text/javascript" src="../lib/jquery-1.7.1.js"></script>
     <script type="text/javascript" src="../src/kalendorius.js"></script>
 
+    <script type="text/javascript">
+      var logEventFired = function(destination, eventName, data) {
+        $(destination).prepend(
+            $('<p>')
+              .text(eventName + ': ' + data)
+        );
+      };
+    </script>
+
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" />
     <link rel="stylesheet" href="kalendorius.css" />
   </head>
@@ -37,13 +46,26 @@
           </h1>
         </div>
         <div class="kal" id="c1"></div>
+        <div class="well">
+          <h4>Events</h4>
+          <div class="events" id="e1"></div>
+        </div>
         <script type="text/javascript">
           $(document).ready(function() {
-            $('#c1').kalendorius({
+            var c1 = $('#c1').kalendorius({
               months: 1,
               tableClass: 'table',
               monthClass: 'large-one'
             });
+            c1.onSelected = function() {
+              logEventFired('#e1', 'selected', c1.getSelected());
+            };
+            c1.onUnselected = function() {
+              logEventFired('#e1', 'unselected', c1.getSelected());
+            };
+            c1.onChange = function() {
+              logEventFired('#e1', 'change', c1.getMonth());
+            };
           });
         </script>
       </div>
@@ -56,14 +78,27 @@
           </h1>
         </div>
         <div class="kal" id="c2"></div>
+        <div class="well">
+          <h4>Events</h4>
+          <div class="events" id="e2"></div>
+        </div>
         <script type="text/javascript">
           $(document).ready(function() {
-            $('#c2').kalendorius({
+            var c2 = $('#c2').kalendorius({
               months: 3,
               tableClass: 'table',
               monthClass: 'small-three',
               dayNames: ['M', 'T', 'W', 'T', 'F', 'S', 'S']
             });
+            c2.onSelected = function() {
+              logEventFired('#e2', 'selected', c2.getSelected());
+            };
+            c2.onUnselected = function() {
+              logEventFired('#e2', 'unselected', c2.getSelected());
+            };
+            c2.onChange = function() {
+              logEventFired('#e2', 'change', c2.getMonth());
+            };
           });
         </script>
       </div>
