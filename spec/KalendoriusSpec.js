@@ -494,13 +494,21 @@
           return _results;
         })()).toEqual(days);
       });
-      return it("should allow custom months names to be passed in", function() {
+      it("should allow custom months names to be passed in", function() {
         var months;
         months = ['sausio', 'vasario', 'kovo', 'balandzio', 'geguzes', 'birzelio', 'liepos', 'rugpjucio', 'rugsejo', 'spalio', 'lapkricio', 'gruodis'];
         container.kalendorius({
           monthNames: months
         });
         return expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes');
+      });
+      return it("should allow passing in a list of dates to be selected", function() {
+        var dates;
+        dates = ['2012-05-12', '2012-05-13', '2012-06-01'];
+        instance = container.kalendorius({
+          selected: dates
+        });
+        return expect(instance.getSelected()).toEqual(dates);
       });
     });
     describe("moving between months", function() {

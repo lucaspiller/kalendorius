@@ -536,6 +536,17 @@ describe "KalendoriusSpec", ->
       })
       expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes')
 
+    it "should allow passing in a list of dates to be selected", ->
+      dates = [
+        '2012-05-12',
+        '2012-05-13',
+        '2012-06-01'
+      ]
+      instance = container.kalendorius({
+        selected: dates
+      })
+      expect(instance.getSelected()).toEqual(dates)
+
   describe "moving between months", ->
     beforeEach ->
       instance = container.kalendorius()

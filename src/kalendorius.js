@@ -260,6 +260,13 @@
         k.options.dayNames = typeof k.options.dayNames !== "undefined" && k.options.dayNames !== null ? k.options.dayNames : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         k.options.monthNames = typeof k.options.monthNames !== "undefined" && k.options.monthNames !== null ? k.options.monthNames : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+        if (typeof k.options.selected !== "undefined" && k.options.selected !== null) {
+          for (var i = 0; i < k.options.selected.length; i++) {
+            var date = k.options.selected[i];
+            k.selected[date] = true;
+          }
+        }
+
         k.render();
       }
     });
