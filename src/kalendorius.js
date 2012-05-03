@@ -7,8 +7,12 @@
       var today = new Date();
       var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
+      var month = $('<div>').attr('data-month', this._toYMD(startOfMonth));
+
+      var monthHeader = $('<div>').addClass('date-month-header').text(this.options.monthNames[renderDate.getMonth()]);
+      month.append(monthHeader);
+
       var table = $('<table>')
-                    .attr('data-month', this._toYMD(startOfMonth))
                     .addClass(this.options.tableClass);
 
 
@@ -57,7 +61,8 @@
         tr.append(currentElement);
       }
 
-      return table;
+      month.append(table);
+      return month;
     };
 
     Kalendorius.prototype._toggleSelected = function(selection) {
@@ -231,6 +236,7 @@
         k.options.months = typeof k.options.months !== "undefined" && k.options.months !== null ? k.options.months : 1;
         k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
         k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        k.options.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         k.render();
         element.trigger('kalendorius:ready');
