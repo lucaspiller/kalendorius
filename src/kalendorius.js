@@ -70,22 +70,28 @@
 
       if (selection.length == 1) {
         // toggle if only one selected
-        selection.each(function() {
-          var date = $(this).attr('data-date');
-          _this.element.find('td[data-date=' + date + ']').toggleClass('date-selected')
-        });
+        var date = selection.attr('data-date');
+        if (selection.hasClass('date-selected')) {
+          _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
+          _this.element.trigger('kalendorius:unselected');
+        } else {
+          _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+          _this.element.trigger('kalendorius:selected');
+        }
       } else if (selection.length == selection.filter('.date-selected').length) {
         // if all selected, set all as unselected
         selection.each(function() {
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
         });
+        _this.element.trigger('kalendorius:unselected');
       } else {
         // if some or none selected, set all as selected
         selection.each(function() {
           var date = $(this).attr('data-date');
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
         });
+        _this.element.trigger('kalendorius:selected');
       }
 
       var selected = this.element.find('td.date-selected');
@@ -155,6 +161,8 @@
           }
           this.blur();
         });
+
+        _this.element.trigger('kalendorius:change');
     };
 
     //
@@ -217,6 +225,7 @@
         k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
         k.render();
+        element.trigger('kalendorius:ready');
       }
     });
 

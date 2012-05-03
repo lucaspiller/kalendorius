@@ -505,22 +505,12 @@ describe "KalendoriusSpec", ->
       container.kalendorius('prev')
       expect(container).toContain("table[data-month=2012-04-01]")
 
-    it "should fire the kalendorius:change event when moving to the next month", ->
-      spyOnEvent(container, 'kalendorius:change')
-      container.kalendorius('prev')
-      expect('kalendorius:change').toHaveBeenTriggeredOn(container)
-
     it "should move to today", ->
       expect(container).toContain("table[data-month=2012-05-01]")
 
       Timecop.freeze new Date(2012, 6, 1, 10, 48) # 1st July 2012
       container.kalendorius('today')
       expect(container).toContain("table[data-month=2012-07-01]")
-
-    it "should fire the kalendorius:change event when moving to the next month", ->
-      spyOnEvent(container, 'kalendorius:change')
-      container.kalendorius('today')
-      expect('kalendorius:change').toHaveBeenTriggeredOn(container)
 
     it "should maintain selected dates when moving between months", ->
       date = container.find('td[data-date=2012-05-11]')

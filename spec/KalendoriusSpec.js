@@ -2,8 +2,9 @@
 (function() {
 
   describe("KalendoriusSpec", function() {
-    var container;
+    var container, kalendorius;
     container = void 0;
+    kalendorius = void 0;
     beforeEach(function() {
       Timecop.install();
       Timecop.freeze(new Date(2012, 4, 1, 10, 48));
@@ -67,8 +68,13 @@
         expect(container).toContain("td[data-date=2012-06-10].date-next-month");
         return expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]");
       });
-      return it("should add the class date-today for today", function() {
+      it("should add the class date-today for today", function() {
         return expect(container).toContain("td[data-date=2012-05-01].date-today");
+      });
+      return it("should fire the kalendorius:ready event", function() {
+        spyOnEvent(container, 'kalendorius:ready');
+        container.kalendorius();
+        return expect('kalendorius:ready').toHaveBeenTriggeredOn(container);
       });
     });
     describe("highlighting", function() {
@@ -89,11 +95,17 @@
           startDate.click();
           return expect(container).toContain("td[data-date=2012-05-11].date-range-start");
         });
-        return it("should add the date-selected class to dates when clicked twice", function() {
+        it("should add the date-selected class to dates when clicked twice", function() {
           startDate.click();
           startDate.click();
           expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
           return expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        });
+        return it("should fire the kalendorius:selected event when clicked twice", function() {
+          spyOnEvent(container, 'kalendorius:selected');
+          startDate.click();
+          startDate.click();
+          return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
         });
       });
       describe("selected dates", function() {
@@ -117,6 +129,18 @@
           startDate.click();
           expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
           return expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        });
+        it("should remove the date-selected class to dates when clicked twice", function() {
+          startDate.click();
+          startDate.click();
+          expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
+          return expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        });
+        it("should fire the kalendorius:unselected event when clicked twice", function() {
+          spyOnEvent(container, 'kalendorius:unselected');
+          startDate.click();
+          startDate.click();
+          return expect('kalendorius:unselected').toHaveBeenTriggeredOn(container);
         });
         it("should not add the date-hover or date-selected class to dates in the last month", function() {
           var date;
@@ -153,12 +177,18 @@
             expect(container).toContain("td[data-date=2012-05-12].date-range");
             return expect(container).toContain("td[data-date=2012-05-13].date-range.date-hover");
           });
-          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+          it("should add the date-selected class to all dates between that and the clicked date", function() {
             endDate.mouseenter();
             endDate.click();
             expect(container).toContain("td[data-date=2012-05-11].date-selected");
             expect(container).toContain("td[data-date=2012-05-12].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+          });
+          return it("should fire the kalendorius:selected event", function() {
+            spyOnEvent(container, 'kalendorius:selected');
+            endDate.mouseenter();
+            endDate.click();
+            return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
           });
         });
         describe("forward on a different week", function() {
@@ -173,7 +203,7 @@
             expect(container).toContain("td[data-date=2012-05-14].date-range");
             return expect(container).toContain("td[data-date=2012-05-15].date-range.date-hover");
           });
-          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+          it("should add the date-selected class to all dates between that and the clicked date", function() {
             endDate.mouseenter();
             endDate.click();
             expect(container).toContain("td[data-date=2012-05-11].date-selected");
@@ -181,6 +211,12 @@
             expect(container).toContain("td[data-date=2012-05-13].date-selected");
             expect(container).toContain("td[data-date=2012-05-14].date-selected");
             return expect(container).toContain("td[data-date=2012-05-15].date-selected.date-hover");
+          });
+          return it("should fire the kalendorius:selected event", function() {
+            spyOnEvent(container, 'kalendorius:selected');
+            endDate.mouseenter();
+            endDate.click();
+            return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
           });
         });
         describe("backward on the same week", function() {
@@ -193,12 +229,18 @@
             expect(container).toContain("td[data-date=2012-05-10].date-range");
             return expect(container).toContain("td[data-date=2012-05-09].date-range.date-hover");
           });
-          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+          it("should add the date-selected class to all dates between that and the clicked date", function() {
             endDate.mouseenter();
             endDate.click();
             expect(container).toContain("td[data-date=2012-05-11].date-selected");
             expect(container).toContain("td[data-date=2012-05-10].date-selected");
             return expect(container).toContain("td[data-date=2012-05-09].date-selected.date-hover");
+          });
+          return it("should fire the kalendorius:selected event", function() {
+            spyOnEvent(container, 'kalendorius:selected');
+            endDate.mouseenter();
+            endDate.click();
+            return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
           });
         });
         return describe("backward on a different week", function() {
@@ -215,7 +257,7 @@
             expect(container).toContain("td[data-date=2012-05-06].date-range");
             return expect(container).toContain("td[data-date=2012-05-05].date-range.date-hover");
           });
-          return it("should add the date-selected class to all dates between that and the clicked date", function() {
+          it("should add the date-selected class to all dates between that and the clicked date", function() {
             endDate.mouseenter();
             endDate.click();
             expect(container).toContain("td[data-date=2012-05-11].date-selected");
@@ -226,23 +268,29 @@
             expect(container).toContain("td[data-date=2012-05-06].date-selected");
             return expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover");
           });
+          return it("should fire the kalendorius:selected event", function() {
+            spyOnEvent(container, 'kalendorius:selected');
+            endDate.mouseenter();
+            endDate.click();
+            return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
+          });
         });
       });
-      return describe("range unselection", function() {
+      describe("range unselection", function() {
         var endDate;
         endDate = void 0;
         beforeEach(function() {
-          return endDate = container.find('td[data-date=2012-05-13]');
+          endDate = container.find('td[data-date=2012-05-13]');
+          startDate.click();
+          endDate.mouseenter();
+          endDate.click();
+          expect(container).toContain("td[data-date=2012-05-11].date-selected");
+          expect(container).toContain("td[data-date=2012-05-12].date-selected");
+          expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+          return startDate.click();
         });
         return describe("forward on the same week", function() {
           it("should remove the date-selected class to all dates between that and the clicked date when none are selected", function() {
-            startDate.click();
-            endDate.mouseenter();
-            endDate.click();
-            expect(container).toContain("td[data-date=2012-05-11].date-selected");
-            expect(container).toContain("td[data-date=2012-05-12].date-selected");
-            expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
-            startDate.click();
             endDate.mouseenter();
             endDate.click();
             expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
@@ -250,26 +298,45 @@
             expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-hover");
           });
-          return it("should set add the date-selected class to all dates between that and the clicked date when some are selected", function() {
-            var midDate;
-            startDate.click();
+          return it("should fire the kalendorius:unselected event", function() {
+            spyOnEvent(container, 'kalendorius:unselected');
             endDate.mouseenter();
             endDate.click();
-            expect(container).toContain("td[data-date=2012-05-11].date-selected");
-            expect(container).toContain("td[data-date=2012-05-12].date-selected");
-            expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
-            midDate = container.find('td[data-date=2012-05-12]');
-            midDate.click();
-            midDate.click();
-            expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
-            startDate.click();
-            endDate.mouseenter();
-            endDate.click();
-            expect(container).toContain("td[data-date=2012-05-11].date-selected");
-            expect(container).toContain("td[data-date=2012-05-12].date-selected");
-            expect(container).toContain("td[data-date=2012-05-13].date-selected");
-            return expect(container).toContain("td[data-date=2012-05-13].date-hover");
+            return expect('kalendorius:unselected').toHaveBeenTriggeredOn(container);
           });
+        });
+      });
+      return describe("range partial selection", function() {
+        var endDate;
+        endDate = void 0;
+        beforeEach(function() {
+          var midDate;
+          endDate = container.find('td[data-date=2012-05-13]');
+          startDate.click();
+          endDate.mouseenter();
+          endDate.click();
+          expect(container).toContain("td[data-date=2012-05-11].date-selected");
+          expect(container).toContain("td[data-date=2012-05-12].date-selected");
+          expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
+          midDate = container.find('td[data-date=2012-05-12]');
+          midDate.click();
+          midDate.click();
+          expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
+          return startDate.click();
+        });
+        it("should set add the date-selected class to all dates between that and the clicked date when some are selected", function() {
+          endDate.mouseenter();
+          endDate.click();
+          expect(container).toContain("td[data-date=2012-05-11].date-selected");
+          expect(container).toContain("td[data-date=2012-05-12].date-selected");
+          expect(container).toContain("td[data-date=2012-05-13].date-selected");
+          return expect(container).toContain("td[data-date=2012-05-13].date-hover");
+        });
+        return it("should fire the kalendorius:selected event", function() {
+          spyOnEvent(container, 'kalendorius:selected');
+          endDate.mouseenter();
+          endDate.click();
+          return expect('kalendorius:selected').toHaveBeenTriggeredOn(container);
         });
       });
     });
@@ -390,16 +457,31 @@
         container.kalendorius('next');
         return expect(container).toContain("table[data-month=2012-06-01]");
       });
+      it("should fire the kalendorius:change event when moving to the next month", function() {
+        spyOnEvent(container, 'kalendorius:change');
+        container.kalendorius('next');
+        return expect('kalendorius:change').toHaveBeenTriggeredOn(container);
+      });
       it("should move to the previous month", function() {
         expect(container).toContain("table[data-month=2012-05-01]");
         container.kalendorius('prev');
         return expect(container).toContain("table[data-month=2012-04-01]");
+      });
+      it("should fire the kalendorius:change event when moving to the next month", function() {
+        spyOnEvent(container, 'kalendorius:change');
+        container.kalendorius('prev');
+        return expect('kalendorius:change').toHaveBeenTriggeredOn(container);
       });
       it("should move to today", function() {
         expect(container).toContain("table[data-month=2012-05-01]");
         Timecop.freeze(new Date(2012, 6, 1, 10, 48));
         container.kalendorius('today');
         return expect(container).toContain("table[data-month=2012-07-01]");
+      });
+      it("should fire the kalendorius:change event when moving to the next month", function() {
+        spyOnEvent(container, 'kalendorius:change');
+        container.kalendorius('today');
+        return expect('kalendorius:change').toHaveBeenTriggeredOn(container);
       });
       it("should maintain selected dates when moving between months", function() {
         var date;
