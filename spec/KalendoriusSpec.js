@@ -444,11 +444,11 @@
         });
         return expect(container).toContain("div[data-month=2012-09-01]");
       });
-      return it("should allow custom days names to be passed in", function() {
+      it("should allow custom days names to be passed in", function() {
         var days, header;
         days = ['pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis', 'sekmadienis'];
         container.kalendorius({
-          days: days
+          dayNames: days
         });
         return expect((function() {
           var _i, _len, _ref, _results;
@@ -460,6 +460,14 @@
           }
           return _results;
         })()).toEqual(days);
+      });
+      return it("should allow custom months names to be passed in", function() {
+        var months;
+        months = ['sausio', 'vasario', 'kovo', 'balandzio', 'geguzes', 'birzelio', 'liepos', 'rugpjucio', 'rugsejo', 'spalio', 'lapkricio', 'gruodis'];
+        container.kalendorius({
+          monthNames: months
+        });
+        return expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes');
       });
     });
     describe("moving between months", function() {

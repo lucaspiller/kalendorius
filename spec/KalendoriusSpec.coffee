@@ -494,11 +494,31 @@ describe "KalendoriusSpec", ->
         'sekmadienis'
       ]
       container.kalendorius({
-        days: days
+        dayNames: days
       })
       expect(
           $(header).text() for header in container.find("th")
         ).toEqual days
+
+    it "should allow custom months names to be passed in", ->
+      months = [
+        'sausio',
+        'vasario',
+        'kovo',
+        'balandzio',
+        'geguzes',
+        'birzelio',
+        'liepos',
+        'rugpjucio',
+        'rugsejo',
+        'spalio',
+        'lapkricio',
+        'gruodis',
+      ]
+      container.kalendorius({
+        monthNames: months
+      })
+      expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes')
 
   describe "moving between months", ->
     beforeEach ->

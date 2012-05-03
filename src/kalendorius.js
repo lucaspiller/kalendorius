@@ -25,7 +25,7 @@
       var row = $('<tr>');
       head.append(row);
       for (var day = 0; day < 7; day++) {
-        var column = $('<th>').text(this.options.days[day]);
+        var column = $('<th>').text(this.options.dayNames[day]);
         row.append(column);
       }
 
@@ -239,8 +239,8 @@
         k.options = options || {};
         k.options.months = typeof k.options.months !== "undefined" && k.options.months !== null ? k.options.months : 1;
         k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
-        k.options.days = typeof k.options.days !== "undefined" && k.options.days !== null ? k.options.days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        k.options.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        k.options.dayNames = typeof k.options.dayNames !== "undefined" && k.options.dayNames !== null ? k.options.dayNames : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        k.options.monthNames = typeof k.options.monthNames !== "undefined" && k.options.monthNames !== null ? k.options.monthNames : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         k.render();
         element.trigger('kalendorius:ready');
