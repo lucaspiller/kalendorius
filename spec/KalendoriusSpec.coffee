@@ -471,6 +471,12 @@ describe "KalendoriusSpec", ->
       })
       expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered")
 
+    it "should allow adding classes to the months", ->
+      container.kalendorius({
+        monthClass: 'month'
+      })
+      expect(container).toContain("div[data-month=2012-05-01].month")
+
     it "should allow starting from a custom month", ->
       container.kalendorius({
         date: new Date(2012, 8, 23) # 23rd September 2012

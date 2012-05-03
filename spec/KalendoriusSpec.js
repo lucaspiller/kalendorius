@@ -432,6 +432,12 @@
         });
         return expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered");
       });
+      it("should allow adding classes to the months", function() {
+        container.kalendorius({
+          monthClass: 'month'
+        });
+        return expect(container).toContain("div[data-month=2012-05-01].month");
+      });
       it("should allow starting from a custom month", function() {
         container.kalendorius({
           date: new Date(2012, 8, 23)

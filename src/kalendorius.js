@@ -7,9 +7,13 @@
       var today = new Date();
       var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
-      var month = $('<div>').attr('data-month', this._toYMD(startOfMonth));
+      var month = $('<div>')
+                    .addClass(this.options.monthClass)
+                    .attr('data-month', this._toYMD(startOfMonth));
 
-      var monthHeader = $('<div>').addClass('date-month-header').text(this.options.monthNames[renderDate.getMonth()]);
+      var monthHeader = $('<div>')
+                    .addClass('date-month-header')
+                    .text(this.options.monthNames[renderDate.getMonth()]);
       month.append(monthHeader);
 
       var table = $('<table>')
