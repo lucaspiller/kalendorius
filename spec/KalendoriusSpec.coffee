@@ -724,3 +724,11 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("td[data-date=2012-05-11].date-selected")
       expect(container).toContain("td[data-date=2012-05-12].date-selected")
       expect(instance.getSelected()).toEqual(dates)
+
+    it "should be able to be ran against a jquery selection", ->
+      dates = [
+        '2012-05-11',
+        '2012-05-12'
+      ]
+      $(container).kalendorius('setSelected', dates)
+      expect(instance.getSelected()).toEqual(dates)

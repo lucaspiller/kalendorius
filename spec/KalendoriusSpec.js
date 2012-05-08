@@ -671,13 +671,19 @@
       beforeEach(function() {
         return instance = container.kalendorius();
       });
-      return it("should set the passed dates as selected", function() {
+      it("should set the passed dates as selected", function() {
         var dates;
         dates = ['2012-05-11', '2012-05-12'];
         expect(instance.getSelected()).toEqual([]);
         instance.setSelected(dates);
         expect(container).toContain("td[data-date=2012-05-11].date-selected");
         expect(container).toContain("td[data-date=2012-05-12].date-selected");
+        return expect(instance.getSelected()).toEqual(dates);
+      });
+      return it("should be able to be ran against a jquery selection", function() {
+        var dates;
+        dates = ['2012-05-11', '2012-05-12'];
+        $(container).kalendorius('setSelected', dates);
         return expect(instance.getSelected()).toEqual(dates);
       });
     });

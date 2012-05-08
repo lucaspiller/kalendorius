@@ -241,7 +241,7 @@
     return Kalendorius;
   })();
 
-  $.fn.kalendorius = function(options) {
+  $.fn.kalendorius = function(options, arg1) {
     this.each(function(_, element) {
       var element = $(element);
       var k = element.data('kalendorius');
@@ -260,6 +260,8 @@
       } else if (options === "today") {
         k.options.date = new Date();
         k.render();
+      } else if (options == "setSelected") {
+        k.setSelected(arg1);
       } else {
         k.selected = {};
         k.options = options || {};
