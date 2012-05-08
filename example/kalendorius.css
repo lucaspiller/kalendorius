@@ -79,12 +79,12 @@
 
 /* make selected dates outside of the month light green */
 .kal .table tbody tr td.date-selected span {
-  background-color: rgba(0, 255, 0, 0.1);
+  background-color: #EBFDE8;
 }
 
 /* mark selected dates in the current month green */
 .table tbody tr td.date-current-month.date-selected span {
-  background-color: rgba(0, 255, 0, 0.4);
+  background-color: #B0F8A4;
 }
 
 /* mark dates in a range selection as light blue */
