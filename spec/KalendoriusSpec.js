@@ -651,7 +651,7 @@
         return expect(instance.getSelected()).toEqual(['2012-05-02', '2012-05-11', '2012-05-12', '2012-05-13', '2012-05-20']);
       });
     });
-    return describe("#getMonth", function() {
+    describe("#getMonth", function() {
       beforeEach(function() {
         return instance = container.kalendorius();
       });
@@ -665,6 +665,20 @@
       return it("should return the name of the current month after moving to the last month", function() {
         container.kalendorius('prev');
         return expect(instance.getMonth()).toEqual('April');
+      });
+    });
+    return describe("#setSelected", function() {
+      beforeEach(function() {
+        return instance = container.kalendorius();
+      });
+      return it("should set the passed dates as selected", function() {
+        var dates;
+        dates = ['2012-05-11', '2012-05-12'];
+        expect(instance.getSelected()).toEqual([]);
+        instance.setSelected(dates);
+        expect(container).toContain("td[data-date=2012-05-11].date-selected");
+        expect(container).toContain("td[data-date=2012-05-12].date-selected");
+        return expect(instance.getSelected()).toEqual(dates);
       });
     });
   });

@@ -706,3 +706,21 @@ describe "KalendoriusSpec", ->
     it "should return the name of the current month after moving to the last month", ->
       container.kalendorius('prev')
       expect(instance.getMonth()).toEqual('April')
+
+  describe "#setSelected", ->
+    beforeEach ->
+      instance = container.kalendorius()
+
+    it "should set the passed dates as selected", ->
+      dates = [
+        '2012-05-11',
+        '2012-05-12'
+      ]
+
+      expect(instance.getSelected()).toEqual([])
+
+      instance.setSelected(dates)
+
+      expect(container).toContain("td[data-date=2012-05-11].date-selected")
+      expect(container).toContain("td[data-date=2012-05-12].date-selected")
+      expect(instance.getSelected()).toEqual(dates)

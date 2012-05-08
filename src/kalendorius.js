@@ -142,6 +142,14 @@
       return this.options.monthNames[this.options.date.getMonth()];
     };
 
+    Kalendorius.prototype.setSelected = function(dates) {
+      for (var i = 0; i < dates.length; i++) {
+        var date = dates[i];
+        this.selected[date] = true;
+        this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+      }
+    };
+
     Kalendorius.prototype.render = function() {
       var _this = this;
       this.element.html('');
