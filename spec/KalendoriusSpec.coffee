@@ -97,7 +97,8 @@ describe "KalendoriusSpec", ->
 
       it "should fire the selected event when clicked twice", ->
         triggered = false
-        instance.onSelected = ->
+        instance.onSelected = (args) ->
+          expect(args).toEqual(['2012-05-11'])
           expect(instance.getSelected()).toEqual(['2012-05-11'])
           triggered = true
 
@@ -140,7 +141,9 @@ describe "KalendoriusSpec", ->
 
       it "should fire the unselected event when clicked twice", ->
         triggered = false
-        instance.onUnselected = ->
+        instance.onUnselected = (args) ->
+          expect(args).toEqual(['2012-05-11'])
+          expect(instance.getSelected()).toEqual([])
           triggered = true
 
         startDate.click()
@@ -195,7 +198,8 @@ describe "KalendoriusSpec", ->
 
         it "should fire the selected event", ->
           triggered = false
-          instance.onSelected = ->
+          instance.onSelected = (args) ->
+            expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
             expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
             triggered = true
 
@@ -229,7 +233,8 @@ describe "KalendoriusSpec", ->
 
         it "should fire the selected event", ->
           triggered = false
-          instance.onSelected = ->
+          instance.onSelected = (args) ->
+            expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15'])
             expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15'])
             triggered = true
 
@@ -259,7 +264,8 @@ describe "KalendoriusSpec", ->
 
         it "should fire the selected event", ->
           triggered = false
-          instance.onSelected = ->
+          instance.onSelected = (args) ->
+            expect(args).toEqual(['2012-05-09', '2012-05-10', '2012-05-11'])
             expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11'])
             triggered = true
 
@@ -297,7 +303,8 @@ describe "KalendoriusSpec", ->
 
         it "should fire the selected event", ->
           triggered = false
-          instance.onSelected = ->
+          instance.onSelected = (args) ->
+            expect(args).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11'])
             expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11'])
             triggered = true
 
@@ -336,7 +343,9 @@ describe "KalendoriusSpec", ->
 
         it "should fire the unselected event", ->
           triggered = false
-          instance.onUnselected = ->
+          instance.onUnselected = (args) ->
+            expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
+            expect(instance.getSelected()).toEqual([])
             triggered = true
 
           endDate.mouseenter()
@@ -379,7 +388,8 @@ describe "KalendoriusSpec", ->
 
       it "should fire the selected event", ->
         triggered = false
-        instance.onSelected = ->
+        instance.onSelected = (args) ->
+          expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
           expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
           triggered = true
 

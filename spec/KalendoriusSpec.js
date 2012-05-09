@@ -102,7 +102,8 @@
         return it("should fire the selected event when clicked twice", function() {
           var triggered;
           triggered = false;
-          instance.onSelected = function() {
+          instance.onSelected = function(args) {
+            expect(args).toEqual(['2012-05-11']);
             expect(instance.getSelected()).toEqual(['2012-05-11']);
             return triggered = true;
           };
@@ -142,7 +143,9 @@
         it("should fire the unselected event when clicked twice", function() {
           var triggered;
           triggered = false;
-          instance.onUnselected = function() {
+          instance.onUnselected = function(args) {
+            expect(args).toEqual(['2012-05-11']);
+            expect(instance.getSelected()).toEqual([]);
             return triggered = true;
           };
           startDate.click();
@@ -194,7 +197,8 @@
           return it("should fire the selected event", function() {
             var triggered;
             triggered = false;
-            instance.onSelected = function() {
+            instance.onSelected = function(args) {
+              expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
               expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
               return triggered = true;
             };
@@ -227,7 +231,8 @@
           return it("should fire the selected event", function() {
             var triggered;
             triggered = false;
-            instance.onSelected = function() {
+            instance.onSelected = function(args) {
+              expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
               expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
               return triggered = true;
             };
@@ -256,7 +261,8 @@
           return it("should fire the selected event", function() {
             var triggered;
             triggered = false;
-            instance.onSelected = function() {
+            instance.onSelected = function(args) {
+              expect(args).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
               expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
@@ -293,7 +299,8 @@
           return it("should fire the selected event", function() {
             var triggered;
             triggered = false;
-            instance.onSelected = function() {
+            instance.onSelected = function(args) {
+              expect(args).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
               expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
@@ -328,7 +335,9 @@
           return it("should fire the unselected event", function() {
             var triggered;
             triggered = false;
-            instance.onUnselected = function() {
+            instance.onUnselected = function(args) {
+              expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+              expect(instance.getSelected()).toEqual([]);
               return triggered = true;
             };
             endDate.mouseenter();
@@ -366,7 +375,8 @@
         return it("should fire the selected event", function() {
           var triggered;
           triggered = false;
-          instance.onSelected = function() {
+          instance.onSelected = function(args) {
+            expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
             expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
             return triggered = true;
           };

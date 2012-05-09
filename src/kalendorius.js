@@ -78,34 +78,38 @@
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
           _this._updateSelected();
           if (typeof _this.onUnselected !== 'undefined') {
-            _this.onUnselected();
+            _this.onUnselected([date]);
           }
         } else {
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
           _this._updateSelected();
           if (typeof _this.onSelected !== 'undefined') {
-            _this.onSelected();
+            _this.onSelected([date]);
           }
         }
       } else if (selection.length == selection.filter('.date-selected').length) {
         // if all selected, set all as unselected
+        var dates = [];
         selection.each(function() {
           var date = $(this).attr('data-date');
+          dates.push(date);
           _this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
         });
         _this._updateSelected();
         if (typeof _this.onUnselected !== 'undefined') {
-          _this.onUnselected();
+          _this.onUnselected(dates);
         }
       } else {
         // if some or none selected, set all as selected
+        var dates = [];
         selection.each(function() {
           var date = $(this).attr('data-date');
+          dates.push(date);
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
         });
         _this._updateSelected();
         if (typeof _this.onSelected !== 'undefined') {
-          _this.onSelected();
+          _this.onSelected(dates);
         }
       }
     };
