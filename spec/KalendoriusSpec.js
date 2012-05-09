@@ -678,13 +678,19 @@
         instance.setSelected(dates);
         expect(container).toContain("td[data-date=2012-05-11].date-selected");
         expect(container).toContain("td[data-date=2012-05-12].date-selected");
-        return expect(instance.getSelected()).toEqual(dates);
+        expect(instance.getSelected()).toEqual(dates);
+        instance.setSelected(dates, false);
+        expect(container).not.toContain("td[data-date=2012-05-11].date-selected");
+        expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
+        return expect(instance.getSelected()).toEqual([]);
       });
       return it("should be able to be ran against a jquery selection", function() {
         var dates;
         dates = ['2012-05-11', '2012-05-12'];
         $(container).kalendorius('setSelected', dates);
-        return expect(instance.getSelected()).toEqual(dates);
+        expect(instance.getSelected()).toEqual(dates);
+        $(container).kalendorius('setSelected', dates, false);
+        return expect(instance.getSelected()).toEqual([]);
       });
     });
   });

@@ -142,11 +142,20 @@
       return this.options.monthNames[this.options.date.getMonth()];
     };
 
-    Kalendorius.prototype.setSelected = function(dates) {
+    Kalendorius.prototype.setSelected = function(dates, selected) {
+      if (selected == undefined) {
+        selected = true;
+      }
+
       for (var i = 0; i < dates.length; i++) {
         var date = dates[i];
-        this.selected[date] = true;
-        this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+        if (selected) {
+          this.selected[date] = true;
+          this.element.find('td[data-date=' + date + ']').addClass('date-selected')
+        } else {
+          delete this.selected[date];
+          this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
+        }
       }
     };
 
@@ -241,7 +250,7 @@
     return Kalendorius;
   })();
 
-  $.fn.kalendorius = function(options, arg1) {
+  $.fn.kalendorius = function(options, arg1, arg2) {
     this.each(function(_, element) {
       var element = $(element);
       var k = element.data('kalendorius');
@@ -261,7 +270,7 @@
         k.options.date = new Date();
         k.render();
       } else if (options == "setSelected") {
-        k.setSelected(arg1);
+        k.setSelected(arg1, arg2);
       } else {
         k.selected = {};
         k.options = options || {};
