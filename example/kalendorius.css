@@ -101,3 +101,8 @@
 .kal .table tbody tr td.date-current-month.date-hover span {
   background-color: #7F9EE0;
 }
+/* mark dates as hovered dark blue */
+.kal .table tbody tr td.date-current-month.date-past span {
+  color: #ddd;
+  cursor: default;
+}

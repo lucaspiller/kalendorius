@@ -55,7 +55,8 @@
             var c1 = $('#c1').kalendorius({
               months: 1,
               tableClass: 'table',
-              monthClass: 'large-one'
+              monthClass: 'large-one',
+              disablePast: true
             });
             c1.onSelected = function() {
               logEventFired('#e1', 'selected', c1.getSelected());
@@ -88,7 +89,8 @@
               months: 3,
               tableClass: 'table',
               monthClass: 'small-three',
-              dayNames: ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+              dayNames: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+              disablePast: true
             });
             c2.onSelected = function() {
               logEventFired('#e2', 'selected', c2.getSelected());
