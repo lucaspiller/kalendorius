@@ -694,13 +694,38 @@
         expect(container).not.toContain("td[data-date=2012-05-12].date-selected");
         return expect(instance.getSelected()).toEqual([]);
       });
-      return it("should be able to be ran against a jquery selection", function() {
+      it("should be able to be ran against a jquery selection", function() {
         var dates;
         dates = ['2012-05-11', '2012-05-12'];
         $(container).kalendorius('setSelected', dates);
         expect(instance.getSelected()).toEqual(dates);
         $(container).kalendorius('setSelected', dates, false);
         return expect(instance.getSelected()).toEqual([]);
+      });
+      it("should fire the onSelected event when dates are selected", function() {
+        var dates, triggered;
+        dates = ['2012-05-11', '2012-05-12'];
+        triggered = false;
+        instance.onSelected = function(args) {
+          expect(args).toEqual(dates);
+          expect(instance.getSelected()).toEqual(dates);
+          return triggered = true;
+        };
+        instance.setSelected(dates);
+        return expect(triggered).toEqual(true);
+      });
+      return it("should fire the onUnselected event when dates are unselected", function() {
+        var dates, triggered;
+        dates = ['2012-05-11', '2012-05-12'];
+        instance.setSelected(dates);
+        triggered = false;
+        instance.onUnselected = function(args) {
+          expect(args).toEqual(dates);
+          expect(instance.getSelected()).toEqual([]);
+          return triggered = true;
+        };
+        instance.setSelected(dates, false);
+        return expect(triggered).toEqual(true);
       });
     });
   });

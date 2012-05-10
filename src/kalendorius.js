@@ -161,6 +161,16 @@
           this.element.find('td[data-date=' + date + ']').removeClass('date-selected')
         }
       }
+
+      if (selected) {
+        if (typeof this.onSelected !== 'undefined') {
+          this.onSelected(dates);
+        }
+      } else {
+        if (typeof this.onUnselected !== 'undefined') {
+          this.onUnselected(dates);
+        }
+      }
     };
 
     Kalendorius.prototype.render = function() {

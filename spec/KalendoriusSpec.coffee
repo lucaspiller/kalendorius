@@ -752,3 +752,35 @@ describe "KalendoriusSpec", ->
       $(container).kalendorius('setSelected', dates, false)
       expect(instance.getSelected()).toEqual([])
 
+    it "should fire the onSelected event when dates are selected", ->
+      dates = [
+        '2012-05-11',
+        '2012-05-12'
+      ]
+
+      triggered = false
+      instance.onSelected = (args) ->
+        expect(args).toEqual(dates)
+        expect(instance.getSelected()).toEqual(dates)
+        triggered = true
+
+      instance.setSelected(dates)
+
+      expect(triggered).toEqual(true)
+
+    it "should fire the onUnselected event when dates are unselected", ->
+      dates = [
+        '2012-05-11',
+        '2012-05-12'
+      ]
+      instance.setSelected(dates)
+
+      triggered = false
+      instance.onUnselected = (args) ->
+        expect(args).toEqual(dates)
+        expect(instance.getSelected()).toEqual([])
+        triggered = true
+
+      instance.setSelected(dates, false)
+
+      expect(triggered).toEqual(true)
