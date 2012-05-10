@@ -7,7 +7,7 @@
     instance = void 0;
     beforeEach(function() {
       Timecop.install();
-      Timecop.freeze(new Date(2012, 4, 1, 10, 48));
+      Timecop.freeze(new Date(2012, 4, 4, 10, 48));
       return container = $("<div>");
     });
     afterEach(function() {
@@ -54,6 +54,11 @@
         }
         return _results;
       });
+      it("should mark dates in the past", function() {
+        expect(container).toContain("td[data-date=2012-05-01].date-past");
+        expect(container).toContain("td[data-date=2012-05-02].date-past");
+        return expect(container).not.toContain("td[data-date=2012-05-04].date-past");
+      });
       it("should contain the days of the last month in the first week", function() {
         expect(container).not.toContain("td[data-date=2012-04-29].date-prev-month");
         return expect(container).toContain("td[data-date=2012-04-30].date-prev-month");
@@ -72,7 +77,7 @@
         return expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]");
       });
       return it("should add the class date-today for today", function() {
-        return expect(container).toContain("td[data-date=2012-05-01].date-today");
+        return expect(container).toContain("td[data-date=2012-05-04].date-today");
       });
     });
     describe("highlighting", function() {

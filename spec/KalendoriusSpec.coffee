@@ -4,7 +4,7 @@ describe "KalendoriusSpec", ->
 
   beforeEach ->
     Timecop.install()
-    Timecop.freeze new Date(2012, 4, 1, 10, 48) # 1st May 2012
+    Timecop.freeze new Date(2012, 4, 4, 10, 48) # 4th May 2012
     container = $("<div>")
 
   afterEach ->
@@ -45,6 +45,12 @@ describe "KalendoriusSpec", ->
           formattedDate = date
         expect(container).toContain("td[data-date=2012-05-#{formattedDate}].date-current-month")
 
+    it "should mark dates in the past", ->
+      expect(container).toContain("td[data-date=2012-05-01].date-past")
+      expect(container).toContain("td[data-date=2012-05-02].date-past")
+      expect(container).toContain("td[data-date=2012-05-03].date-past")
+      expect(container).not.toContain("td[data-date=2012-05-04].date-past")
+
     it "should contain the days of the last month in the first week", ->
       expect(container).not.toContain("td[data-date=2012-04-29].date-prev-month")
 
@@ -67,7 +73,7 @@ describe "KalendoriusSpec", ->
       expect(container).not.toContain("td[data-date=2012-06-11][class=date-next-month]")
 
     it "should add the class date-today for today", ->
-      expect(container).toContain("td[data-date=2012-05-01].date-today")
+      expect(container).toContain("td[data-date=2012-05-04].date-today")
 
   describe "highlighting", ->
     startDate = undefined

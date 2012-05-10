@@ -60,6 +60,8 @@
           currentElement.addClass('date-current-month');
           if (currentDate.getDate() == today.getDate() && currentDate.getMonth() == today.getMonth() && currentDate.getFullYear() == today.getFullYear()) {
             currentElement.addClass('date-today');
+          } else if (currentDate.getDate() < today.getDate()) {
+            currentElement.addClass('date-past');
           }
         }
         tr.append(currentElement);
