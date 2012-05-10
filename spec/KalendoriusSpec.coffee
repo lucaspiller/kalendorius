@@ -688,6 +688,22 @@ describe "KalendoriusSpec", ->
         instance.setSelected(dates)
         expect(instance.getSelected()).toEqual(['2012-05-04'])
 
+      it "should not accept dates via selected option in the past", ->
+        dates = [
+          '2012-05-01',
+          '2012-05-02',
+          '2012-05-03',
+          '2012-05-04'
+        ]
+
+        container = $('<div>')
+        instance = container.kalendorius({
+          selected: dates,
+          disablePast: true
+        })
+
+        expect(instance.getSelected()).toEqual(['2012-05-04'])
+
   describe "moving between months", ->
     beforeEach ->
       instance = container.kalendorius()

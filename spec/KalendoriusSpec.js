@@ -645,10 +645,20 @@
           startDate.click();
           return expect(container).not.toContain("td[data-date=2012-05-01].date-range-start");
         });
-        return it("should not accept dates via setSelected in the past", function() {
+        it("should not accept dates via setSelected in the past", function() {
           var dates;
           dates = ['2012-05-01', '2012-05-02', '2012-05-03', '2012-05-04'];
           instance.setSelected(dates);
+          return expect(instance.getSelected()).toEqual(['2012-05-04']);
+        });
+        return it("should not accept dates via selected option in the past", function() {
+          var dates;
+          dates = ['2012-05-01', '2012-05-02', '2012-05-03', '2012-05-04'];
+          container = $('<div>');
+          instance = container.kalendorius({
+            selected: dates,
+            disablePast: true
+          });
           return expect(instance.getSelected()).toEqual(['2012-05-04']);
         });
       });

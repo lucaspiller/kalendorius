@@ -334,10 +334,7 @@
         k.options.disablePast = typeof k.options.disablePast !== "undefined" && k.options.disablePast !== null ? k.options.disablePast : false;
 
         if (typeof k.options.selected !== "undefined" && k.options.selected !== null) {
-          for (var i = 0; i < k.options.selected.length; i++) {
-            var date = k.options.selected[i];
-            k.selected[date] = true;
-          }
+          k.setSelected(k.options.selected);
         }
 
         k.render();
