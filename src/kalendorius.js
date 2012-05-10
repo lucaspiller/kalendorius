@@ -226,8 +226,8 @@
           this.blur();
         });
 
-        if (typeof _this.onChange !== 'undefined') {
-          _this.onChange();
+        if (typeof _this.onViewChange !== 'undefined') {
+          _this.onViewChange();
         }
     };
 

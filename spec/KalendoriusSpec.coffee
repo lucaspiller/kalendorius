@@ -567,9 +567,9 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-06-01]")
       expect(container.find('div[data-month=2012-06-01] div.month-header').text()).toEqual('June')
 
-    it "should fire the change event when moving to the next month", ->
+    it "should fire the view change event when moving to the next month", ->
        triggered = false
-       instance.onChange = ->
+       instance.onViewChange = ->
          expect(instance.getMonth()).toEqual('June')
          triggered = true
 
@@ -583,9 +583,9 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-04-01]")
       expect(container.find('div[data-month=2012-04-01] div.month-header').text()).toEqual('April')
 
-    it "should fire the change event when moving to the previous month", ->
+    it "should fire the view change event when moving to the previous month", ->
       triggered = false
-      instance.onChange = ->
+      instance.onViewChange = ->
         expect(instance.getMonth()).toEqual('April')
         triggered = true
 
@@ -601,9 +601,9 @@ describe "KalendoriusSpec", ->
       expect(container).toContain("div[data-month=2012-07-01]")
       expect(container.find('div[data-month=2012-07-01] div.month-header').text()).toEqual('July')
 
-    it "should fire the change event when moving to today", ->
+    it "should fire the view change event when moving to today", ->
       triggered = false
-      instance.onChange = ->
+      instance.onViewChange = ->
         expect(instance.getMonth()).toEqual('July')
         triggered = true
 
