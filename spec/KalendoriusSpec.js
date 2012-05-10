@@ -99,11 +99,22 @@
           expect(container).not.toContain("td[data-date=2012-05-11].date-range-start");
           return expect(container).toContain("td[data-date=2012-05-11].date-selected");
         });
-        return it("should fire the selected event when clicked twice", function() {
+        it("should fire the selected event when clicked twice", function() {
           var triggered;
           triggered = false;
           instance.onSelected = function(args) {
             expect(args).toEqual(['2012-05-11']);
+            expect(instance.getSelected()).toEqual(['2012-05-11']);
+            return triggered = true;
+          };
+          startDate.click();
+          startDate.click();
+          return expect(triggered).toEqual(true);
+        });
+        return it("should fire the change event when clicked twice", function() {
+          var triggered;
+          triggered = false;
+          instance.onChange = function() {
             expect(instance.getSelected()).toEqual(['2012-05-11']);
             return triggered = true;
           };
@@ -145,6 +156,17 @@
           triggered = false;
           instance.onUnselected = function(args) {
             expect(args).toEqual(['2012-05-11']);
+            expect(instance.getSelected()).toEqual([]);
+            return triggered = true;
+          };
+          startDate.click();
+          startDate.click();
+          return expect(triggered).toEqual(true);
+        });
+        it("should fire the change event", function() {
+          var triggered;
+          triggered = false;
+          instance.onChange = function() {
             expect(instance.getSelected()).toEqual([]);
             return triggered = true;
           };
@@ -194,11 +216,22 @@
             expect(container).toContain("td[data-date=2012-05-12].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-selected.date-hover");
           });
-          return it("should fire the selected event", function() {
+          it("should fire the selected event", function() {
             var triggered;
             triggered = false;
             instance.onSelected = function(args) {
               expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+              expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+              return triggered = true;
+            };
+            endDate.mouseenter();
+            endDate.click();
+            return expect(triggered).toEqual(true);
+          });
+          return it("should fire the change event", function() {
+            var triggered;
+            triggered = false;
+            instance.onChange = function() {
               expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
               return triggered = true;
             };
@@ -228,11 +261,22 @@
             expect(container).toContain("td[data-date=2012-05-14].date-selected");
             return expect(container).toContain("td[data-date=2012-05-15].date-selected.date-hover");
           });
-          return it("should fire the selected event", function() {
+          it("should fire the selected event", function() {
             var triggered;
             triggered = false;
             instance.onSelected = function(args) {
               expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
+              expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
+              return triggered = true;
+            };
+            endDate.mouseenter();
+            endDate.click();
+            return expect(triggered).toEqual(true);
+          });
+          return it("should fire the change event", function() {
+            var triggered;
+            triggered = false;
+            instance.onChange = function() {
               expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15']);
               return triggered = true;
             };
@@ -258,11 +302,22 @@
             expect(container).toContain("td[data-date=2012-05-10].date-selected");
             return expect(container).toContain("td[data-date=2012-05-09].date-selected.date-hover");
           });
-          return it("should fire the selected event", function() {
+          it("should fire the selected event", function() {
             var triggered;
             triggered = false;
             instance.onSelected = function(args) {
               expect(args).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
+              expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
+              return triggered = true;
+            };
+            endDate.mouseenter();
+            endDate.click();
+            return expect(triggered).toEqual(true);
+          });
+          return it("should fire the change event", function() {
+            var triggered;
+            triggered = false;
+            instance.onChange = function() {
               expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
@@ -296,11 +351,22 @@
             expect(container).toContain("td[data-date=2012-05-06].date-selected");
             return expect(container).toContain("td[data-date=2012-05-05].date-selected.date-hover");
           });
-          return it("should fire the selected event", function() {
+          it("should fire the selected event", function() {
             var triggered;
             triggered = false;
             instance.onSelected = function(args) {
               expect(args).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
+              expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
+              return triggered = true;
+            };
+            endDate.mouseenter();
+            endDate.click();
+            return expect(triggered).toEqual(true);
+          });
+          return it("should fire the change event", function() {
+            var triggered;
+            triggered = false;
+            instance.onChange = function() {
               expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11']);
               return triggered = true;
             };
@@ -332,11 +398,22 @@
             expect(container).not.toContain("td[data-date=2012-05-13].date-selected");
             return expect(container).toContain("td[data-date=2012-05-13].date-hover");
           });
-          return it("should fire the unselected event", function() {
+          it("should fire the unselected event", function() {
             var triggered;
             triggered = false;
             instance.onUnselected = function(args) {
               expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+              expect(instance.getSelected()).toEqual([]);
+              return triggered = true;
+            };
+            endDate.mouseenter();
+            endDate.click();
+            return expect(triggered).toEqual(true);
+          });
+          return it("should fire the change event", function() {
+            var triggered;
+            triggered = false;
+            instance.onChange = function() {
               expect(instance.getSelected()).toEqual([]);
               return triggered = true;
             };
@@ -372,11 +449,22 @@
           expect(container).toContain("td[data-date=2012-05-13].date-selected");
           return expect(container).toContain("td[data-date=2012-05-13].date-hover");
         });
-        return it("should fire the selected event", function() {
+        it("should fire the selected event", function() {
           var triggered;
           triggered = false;
           instance.onSelected = function(args) {
             expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+            expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
+            return triggered = true;
+          };
+          endDate.mouseenter();
+          endDate.click();
+          return expect(triggered).toEqual(true);
+        });
+        return it("should fire the change event", function() {
+          var triggered;
+          triggered = false;
+          instance.onChange = function() {
             expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13']);
             return triggered = true;
           };
@@ -702,25 +790,23 @@
         $(container).kalendorius('setSelected', dates, false);
         return expect(instance.getSelected()).toEqual([]);
       });
-      it("should fire the onSelected event when dates are selected", function() {
+      it("should fire the onChange event when dates are selected", function() {
         var dates, triggered;
         dates = ['2012-05-11', '2012-05-12'];
         triggered = false;
-        instance.onSelected = function(args) {
-          expect(args).toEqual(dates);
+        instance.onChange = function() {
           expect(instance.getSelected()).toEqual(dates);
           return triggered = true;
         };
         instance.setSelected(dates);
         return expect(triggered).toEqual(true);
       });
-      return it("should fire the onUnselected event when dates are unselected", function() {
+      return it("should fire the onChange event when dates are unselected", function() {
         var dates, triggered;
         dates = ['2012-05-11', '2012-05-12'];
         instance.setSelected(dates);
         triggered = false;
-        instance.onUnselected = function(args) {
-          expect(args).toEqual(dates);
+        instance.onChange = function() {
           expect(instance.getSelected()).toEqual([]);
           return triggered = true;
         };

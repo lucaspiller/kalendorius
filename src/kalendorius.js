@@ -80,11 +80,17 @@
           if (typeof _this.onUnselected !== 'undefined') {
             _this.onUnselected([date]);
           }
+          if (typeof _this.onChange !== 'undefined') {
+            _this.onChange();
+          }
         } else {
           _this.element.find('td[data-date=' + date + ']').addClass('date-selected')
           _this._updateSelected();
           if (typeof _this.onSelected !== 'undefined') {
             _this.onSelected([date]);
+          }
+          if (typeof _this.onChange !== 'undefined') {
+            _this.onChange();
           }
         }
       } else if (selection.length == selection.filter('.date-selected').length) {
@@ -99,6 +105,9 @@
         if (typeof _this.onUnselected !== 'undefined') {
           _this.onUnselected(dates);
         }
+        if (typeof _this.onChange !== 'undefined') {
+          _this.onChange();
+        }
       } else {
         // if some or none selected, set all as selected
         var dates = [];
@@ -110,6 +119,9 @@
         _this._updateSelected();
         if (typeof _this.onSelected !== 'undefined') {
           _this.onSelected(dates);
+        }
+        if (typeof _this.onChange !== 'undefined') {
+          _this.onChange();
         }
       }
     };
@@ -162,14 +174,8 @@
         }
       }
 
-      if (selected) {
-        if (typeof this.onSelected !== 'undefined') {
-          this.onSelected(dates);
-        }
-      } else {
-        if (typeof this.onUnselected !== 'undefined') {
-          this.onUnselected(dates);
-        }
+      if (typeof this.onChange !== 'undefined') {
+        this.onChange();
       }
     };
 

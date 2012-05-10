@@ -107,6 +107,17 @@ describe "KalendoriusSpec", ->
 
         expect(triggered).toEqual(true)
 
+      it "should fire the change event when clicked twice", ->
+        triggered = false
+        instance.onChange = ->
+          expect(instance.getSelected()).toEqual(['2012-05-11'])
+          triggered = true
+
+        startDate.click()
+        startDate.click()
+
+        expect(triggered).toEqual(true)
+
     describe "selected dates", ->
       beforeEach ->
         startDate.addClass 'date-selected'
@@ -143,6 +154,17 @@ describe "KalendoriusSpec", ->
         triggered = false
         instance.onUnselected = (args) ->
           expect(args).toEqual(['2012-05-11'])
+          expect(instance.getSelected()).toEqual([])
+          triggered = true
+
+        startDate.click()
+        startDate.click()
+
+        expect(triggered).toEqual(true)
+
+      it "should fire the change event", ->
+        triggered = false
+        instance.onChange = ->
           expect(instance.getSelected()).toEqual([])
           triggered = true
 
@@ -208,6 +230,17 @@ describe "KalendoriusSpec", ->
 
           expect(triggered).toEqual(true)
 
+        it "should fire the change event", ->
+          triggered = false
+          instance.onChange = ->
+            expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
+            triggered = true
+
+          endDate.mouseenter()
+          endDate.click()
+
+          expect(triggered).toEqual(true)
+
       describe "forward on a different week", ->
         beforeEach ->
           endDate = container.find('td[data-date=2012-05-15]')
@@ -235,6 +268,17 @@ describe "KalendoriusSpec", ->
           triggered = false
           instance.onSelected = (args) ->
             expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15'])
+            expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15'])
+            triggered = true
+
+          endDate.mouseenter()
+          endDate.click()
+
+          expect(triggered).toEqual(true)
+
+        it "should fire the change event", ->
+          triggered = false
+          instance.onChange = ->
             expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13', '2012-05-14', '2012-05-15'])
             triggered = true
 
@@ -274,6 +318,17 @@ describe "KalendoriusSpec", ->
 
           expect(triggered).toEqual(true)
 
+        it "should fire the change event", ->
+          triggered = false
+          instance.onChange = ->
+            expect(instance.getSelected()).toEqual(['2012-05-09', '2012-05-10', '2012-05-11'])
+            triggered = true
+
+          endDate.mouseenter()
+          endDate.click()
+
+          expect(triggered).toEqual(true)
+
       describe "backward on a different week", ->
         beforeEach ->
           endDate = container.find('td[data-date=2012-05-05]')
@@ -305,6 +360,17 @@ describe "KalendoriusSpec", ->
           triggered = false
           instance.onSelected = (args) ->
             expect(args).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11'])
+            expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11'])
+            triggered = true
+
+          endDate.mouseenter()
+          endDate.click()
+
+          expect(triggered).toEqual(true)
+
+        it "should fire the change event", ->
+          triggered = false
+          instance.onChange = ->
             expect(instance.getSelected()).toEqual(['2012-05-05', '2012-05-06', '2012-05-07', '2012-05-08', '2012-05-09', '2012-05-10', '2012-05-11'])
             triggered = true
 
@@ -353,6 +419,17 @@ describe "KalendoriusSpec", ->
 
           expect(triggered).toEqual(true)
 
+        it "should fire the change event", ->
+          triggered = false
+          instance.onChange = ->
+            expect(instance.getSelected()).toEqual([])
+            triggered = true
+
+          endDate.mouseenter()
+          endDate.click()
+
+          expect(triggered).toEqual(true)
+
     describe "range partial selection", ->
       endDate = undefined
 
@@ -390,6 +467,17 @@ describe "KalendoriusSpec", ->
         triggered = false
         instance.onSelected = (args) ->
           expect(args).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
+          expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
+          triggered = true
+
+        endDate.mouseenter()
+        endDate.click()
+
+        expect(triggered).toEqual(true)
+
+      it "should fire the change event", ->
+        triggered = false
+        instance.onChange = ->
           expect(instance.getSelected()).toEqual(['2012-05-11', '2012-05-12', '2012-05-13'])
           triggered = true
 
@@ -752,15 +840,14 @@ describe "KalendoriusSpec", ->
       $(container).kalendorius('setSelected', dates, false)
       expect(instance.getSelected()).toEqual([])
 
-    it "should fire the onSelected event when dates are selected", ->
+    it "should fire the onChange event when dates are selected", ->
       dates = [
         '2012-05-11',
         '2012-05-12'
       ]
 
       triggered = false
-      instance.onSelected = (args) ->
-        expect(args).toEqual(dates)
+      instance.onChange = ->
         expect(instance.getSelected()).toEqual(dates)
         triggered = true
 
@@ -768,7 +855,7 @@ describe "KalendoriusSpec", ->
 
       expect(triggered).toEqual(true)
 
-    it "should fire the onUnselected event when dates are unselected", ->
+    it "should fire the onChange event when dates are unselected", ->
       dates = [
         '2012-05-11',
         '2012-05-12'
@@ -776,8 +863,7 @@ describe "KalendoriusSpec", ->
       instance.setSelected(dates)
 
       triggered = false
-      instance.onUnselected = (args) ->
-        expect(args).toEqual(dates)
+      instance.onChange = ->
         expect(instance.getSelected()).toEqual([])
         triggered = true
 
