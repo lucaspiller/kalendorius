@@ -585,71 +585,108 @@ describe "KalendoriusSpec", ->
         expect(container).toContain("div[data-month=2012-06-01] td[data-date=2012-06-01].date-selected.date-hover")
 
   describe "options", ->
-    it "should allow adding classes to the tables", ->
-      container.kalendorius({
-        tableClass: 'table table-bordered'
-      })
-      expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered")
+    describe "tableClass", ->
+      it "should allow adding classes to the tables", ->
+        container.kalendorius({
+          tableClass: 'table table-bordered'
+        })
+        expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered")
 
-    it "should allow adding classes to the months", ->
-      container.kalendorius({
-        monthClass: 'month'
-      })
-      expect(container).toContain("div[data-month=2012-05-01].month")
+    describe "monthClass", ->
+      it "should allow adding classes to the months", ->
+        container.kalendorius({
+          monthClass: 'month'
+        })
+        expect(container).toContain("div[data-month=2012-05-01].month")
 
-    it "should allow starting from a custom month", ->
-      container.kalendorius({
-        date: new Date(2012, 8, 23) # 23rd September 2012
-      })
-      expect(container).toContain("div[data-month=2012-09-01]")
+    describe "date", ->
+      it "should allow starting from a custom month", ->
+        container.kalendorius({
+          date: new Date(2012, 8, 23) # 23rd September 2012
+        })
+        expect(container).toContain("div[data-month=2012-09-01]")
 
-    it "should allow custom days names to be passed in", ->
-      days = [
-        'pirmadienis',
-        'antradienis',
-        'trečiadienis',
-        'ketvirtadienis',
-        'penktadienis',
-        'šeštadienis',
-        'sekmadienis'
-      ]
-      container.kalendorius({
-        dayNames: days
-      })
-      expect(
-          $(header).text() for header in container.find("th")
-        ).toEqual days
+    describe "dayNames", ->
+      it "should allow custom days names to be passed in", ->
+        days = [
+          'pirmadienis',
+          'antradienis',
+          'trečiadienis',
+          'ketvirtadienis',
+          'penktadienis',
+          'šeštadienis',
+          'sekmadienis'
+        ]
+        container.kalendorius({
+          dayNames: days
+        })
+        expect(
+            $(header).text() for header in container.find("th")
+          ).toEqual days
 
-    it "should allow custom months names to be passed in", ->
-      months = [
-        'sausio',
-        'vasario',
-        'kovo',
-        'balandzio',
-        'geguzes',
-        'birzelio',
-        'liepos',
-        'rugpjucio',
-        'rugsejo',
-        'spalio',
-        'lapkricio',
-        'gruodis',
-      ]
-      container.kalendorius({
-        monthNames: months
-      })
-      expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes')
+    describe "monthNames", ->
+      it "should allow custom months names to be passed in", ->
+        months = [
+          'sausio',
+          'vasario',
+          'kovo',
+          'balandzio',
+          'geguzes',
+          'birzelio',
+          'liepos',
+          'rugpjucio',
+          'rugsejo',
+          'spalio',
+          'lapkricio',
+          'gruodis',
+        ]
+        container.kalendorius({
+          monthNames: months
+        })
+        expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes')
 
-    it "should allow passing in a list of dates to be selected", ->
-      dates = [
-        '2012-05-12',
-        '2012-05-13',
-        '2012-06-01'
-      ]
-      instance = container.kalendorius({
-        selected: dates
-      })
-      expect(instance.getSelected()).toEqual(dates)
+    describe "selected", ->
+      it "should allow passing in a list of dates to be selected", ->
+        dates = [
+          '2012-05-12',
+          '2012-05-13',
+          '2012-06-01'
+        ]
+        instance = container.kalendorius({
+          selected: dates
+        })
+        expect(instance.getSelected()).toEqual(dates)
+
+    describe "disablePast", ->
+      startDate = undefined
+
+      beforeEach ->
+        instance = container.kalendorius({
+          disablePast: true
+        })
+        startDate = container.find('td[data-date=2012-05-01]')
+
+      it "should not add the date-hover class on mouse over", ->
+        startDate.mouseenter()
+        expect(container).not.toContain("td[data-date=2012-05-01].date-hover")
+
+        startDate.mouseleave()
+        expect(container).not.toContain("td[data-date=2012-05-01].date-hover")
+
+      it "should not add the date-range-start class when clicked once", ->
+        startDate.click()
+        expect(container).not.toContain("td[data-date=2012-05-01].date-range-start")
+
+      it "should not accept dates via setSelected in the past", ->
+        dates = [
+          '2012-05-01',
+          '2012-05-02',
+          '2012-05-03',
+          '2012-05-04'
+        ]
+
+        instance.setSelected(dates)
+        expect(instance.getSelected()).toEqual(['2012-05-04'])
 
   describe "moving between months", ->
     beforeEach ->

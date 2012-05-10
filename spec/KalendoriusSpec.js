@@ -57,6 +57,7 @@
       it("should mark dates in the past", function() {
         expect(container).toContain("td[data-date=2012-05-01].date-past");
         expect(container).toContain("td[data-date=2012-05-02].date-past");
+        expect(container).toContain("td[data-date=2012-05-03].date-past");
         return expect(container).not.toContain("td[data-date=2012-05-04].date-past");
       });
       it("should contain the days of the last month in the first week", function() {
@@ -562,56 +563,94 @@
       });
     });
     describe("options", function() {
-      it("should allow adding classes to the tables", function() {
-        container.kalendorius({
-          tableClass: 'table table-bordered'
+      describe("tableClass", function() {
+        return it("should allow adding classes to the tables", function() {
+          container.kalendorius({
+            tableClass: 'table table-bordered'
+          });
+          return expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered");
         });
-        return expect(container).toContain("div[data-month=2012-05-01] table.table.table-bordered");
       });
-      it("should allow adding classes to the months", function() {
-        container.kalendorius({
-          monthClass: 'month'
+      describe("monthClass", function() {
+        return it("should allow adding classes to the months", function() {
+          container.kalendorius({
+            monthClass: 'month'
+          });
+          return expect(container).toContain("div[data-month=2012-05-01].month");
         });
-        return expect(container).toContain("div[data-month=2012-05-01].month");
       });
-      it("should allow starting from a custom month", function() {
-        container.kalendorius({
-          date: new Date(2012, 8, 23)
+      describe("date", function() {
+        return it("should allow starting from a custom month", function() {
+          container.kalendorius({
+            date: new Date(2012, 8, 23)
+          });
+          return expect(container).toContain("div[data-month=2012-09-01]");
         });
-        return expect(container).toContain("div[data-month=2012-09-01]");
       });
-      it("should allow custom days names to be passed in", function() {
-        var days, header;
-        days = ['pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis', 'sekmadienis'];
-        container.kalendorius({
-          dayNames: days
+      describe("dayNames", function() {
+        return it("should allow custom days names to be passed in", function() {
+          var days, header;
+          days = ['pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis', 'sekmadienis'];
+          container.kalendorius({
+            dayNames: days
+          });
+          return expect((function() {
+            var _i, _len, _ref, _results;
+            _ref = container.find("th");
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              header = _ref[_i];
+              _results.push($(header).text());
+            }
+            return _results;
+          })()).toEqual(days);
         });
-        return expect((function() {
-          var _i, _len, _ref, _results;
-          _ref = container.find("th");
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            header = _ref[_i];
-            _results.push($(header).text());
-          }
-          return _results;
-        })()).toEqual(days);
       });
-      it("should allow custom months names to be passed in", function() {
-        var months;
-        months = ['sausio', 'vasario', 'kovo', 'balandzio', 'geguzes', 'birzelio', 'liepos', 'rugpjucio', 'rugsejo', 'spalio', 'lapkricio', 'gruodis'];
-        container.kalendorius({
-          monthNames: months
+      describe("monthNames", function() {
+        return it("should allow custom months names to be passed in", function() {
+          var months;
+          months = ['sausio', 'vasario', 'kovo', 'balandzio', 'geguzes', 'birzelio', 'liepos', 'rugpjucio', 'rugsejo', 'spalio', 'lapkricio', 'gruodis'];
+          container.kalendorius({
+            monthNames: months
+          });
+          return expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes');
         });
-        return expect(container.find('div[data-month=2012-05-01] div.month-header').text()).toEqual('geguzes');
       });
-      return it("should allow passing in a list of dates to be selected", function() {
-        var dates;
-        dates = ['2012-05-12', '2012-05-13', '2012-06-01'];
-        instance = container.kalendorius({
-          selected: dates
+      describe("selected", function() {
+        return it("should allow passing in a list of dates to be selected", function() {
+          var dates;
+          dates = ['2012-05-12', '2012-05-13', '2012-06-01'];
+          instance = container.kalendorius({
+            selected: dates
+          });
+          return expect(instance.getSelected()).toEqual(dates);
         });
-        return expect(instance.getSelected()).toEqual(dates);
+      });
+      return describe("disablePast", function() {
+        var startDate;
+        startDate = void 0;
+        beforeEach(function() {
+          instance = container.kalendorius({
+            disablePast: true
+          });
+          return startDate = container.find('td[data-date=2012-05-01]');
+        });
+        it("should not add the date-hover class on mouse over", function() {
+          startDate.mouseenter();
+          expect(container).not.toContain("td[data-date=2012-05-01].date-hover");
+          startDate.mouseleave();
+          return expect(container).not.toContain("td[data-date=2012-05-01].date-hover");
+        });
+        it("should not add the date-range-start class when clicked once", function() {
+          startDate.click();
+          return expect(container).not.toContain("td[data-date=2012-05-01].date-range-start");
+        });
+        return it("should not accept dates via setSelected in the past", function() {
+          var dates;
+          dates = ['2012-05-01', '2012-05-02', '2012-05-03', '2012-05-04'];
+          instance.setSelected(dates);
+          return expect(instance.getSelected()).toEqual(['2012-05-04']);
+        });
       });
     });
     describe("moving between months", function() {

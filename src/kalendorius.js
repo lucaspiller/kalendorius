@@ -4,7 +4,7 @@
     }
 
     Kalendorius.prototype._renderMonth = function(renderDate) {
-      var today = new Date();
+      var today = this._today();
       var startOfMonth = new Date(renderDate.getFullYear(), renderDate.getMonth(), 1);
 
       var month = $('<div>')
@@ -60,7 +60,7 @@
           currentElement.addClass('date-current-month');
           if (currentDate.getDate() == today.getDate() && currentDate.getMonth() == today.getMonth() && currentDate.getFullYear() == today.getFullYear()) {
             currentElement.addClass('date-today');
-          } else if (currentDate.getDate() < today.getDate()) {
+          } else if (currentDate < today) {
             currentElement.addClass('date-past');
           }
         }
@@ -161,12 +161,23 @@
     };
 
     Kalendorius.prototype.setSelected = function(dates, selected) {
+      var today = this._today();
+
       if (selected == undefined) {
         selected = true;
       }
 
       for (var i = 0; i < dates.length; i++) {
         var date = dates[i];
+
+        // ignore dates in the past
+        if (this.options.disablePast) {
+          var currentDate = new Date(date);
+          if (currentDate < today) {
+            continue;
+          }
+        }
+
         if (selected) {
           this.selected[date] = true;
           this.element.find('td[data-date=' + date + ']').addClass('date-selected')
@@ -203,6 +214,13 @@
         .mouseenter(function() {
           var $this = $(this);
           if ($this.hasClass('date-current-month')) {
+            // don't hover for dates in the past
+            if (_this.options.disablePast) {
+              var currentDate = new Date($this.attr('data-date'));
+              if (currentDate < _this._today()) {
+                return;
+              }
+            }
             $this.addClass('date-hover');
             if (rangeStart !== undefined) {
               _this.element.find('td').removeClass('date-range');
@@ -214,6 +232,13 @@
           $this.removeClass('date-hover');
         }).click(function() {
           var $this = $(this);
+          // don't click for dates in the past
+          if (_this.options.disablePast) {
+            var currentDate = new Date($this.attr('data-date'));
+            if (currentDate < _this._today()) {
+              return;
+            }
+          }
           if ($this.hasClass('date-range-start')) {
             rangeStart = undefined;
             _this.element.find('td').removeClass('date-range');
@@ -237,6 +262,12 @@
         if (typeof _this.onViewChange !== 'undefined') {
           _this.onViewChange();
         }
+    };
+
+    Kalendorius.prototype._today = function() {
+      var date = new Date();
+      date.setHours(0,0,0,0);
+      return date;
     };
 
     //
@@ -300,6 +331,7 @@
         k.options.date = typeof k.options.date !== "undefined" && k.options.date !== null ? k.options.date : new Date();
         k.options.dayNames = typeof k.options.dayNames !== "undefined" && k.options.dayNames !== null ? k.options.dayNames : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         k.options.monthNames = typeof k.options.monthNames !== "undefined" && k.options.monthNames !== null ? k.options.monthNames : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        k.options.disablePast = typeof k.options.disablePast !== "undefined" && k.options.disablePast !== null ? k.options.disablePast : false;
 
         if (typeof k.options.selected !== "undefined" && k.options.selected !== null) {
           for (var i = 0; i < k.options.selected.length; i++) {
